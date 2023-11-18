@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.tilt;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
