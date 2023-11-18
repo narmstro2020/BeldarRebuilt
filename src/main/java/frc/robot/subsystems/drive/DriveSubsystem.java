@@ -9,41 +9,53 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class DriveSubsystem extends SubsystemBase {
 
-  private static final class Constants{
+  private static final class Constants {
 
   }
 
-  //fields
-  //constructor
+  // fields
+  // constructor
   public DriveSubsystem() {
 
   }
 
-  //telemetry methods
-  public Pose2d getPosition(){
-    return null; //TODO
+  // telemetry methods
+  public Pose2d getPosition() {
+    return null; // TODO
   }
 
-  public ChassisSpeeds getVelocity(){
-   return null; //TODO 
+  public ChassisSpeeds getVelocity() {
+    return null; // TODO
   }
 
-  public void setPosition(Pose2d radians){
-    //TODO
+  public void setPosition(Pose2d radians) {
+    // TODO
   }
 
-  //control methods
-  public void driveAtVelocity(ChassisSpeeds chassisSpeeds){
-    //TODO
+  // control methods
+  public void driveAtVelocity(ChassisSpeeds chassisSpeeds) {
+    // TODO
   }
 
-  //command creation methods
-  public Command createManualDriveCommand(CommandXboxController commandXboxController){
-    return null; //TODO
+  // command creation methods
+  public Command createManualDriveCommand(CommandXboxController commandXboxController) {
+    return null; // TODO
   }
 
-  public void setDefaultCommand(){
-    //TODO
+  public Command createDriveForeverCommand(ChassisSpeeds chassisSpeeds) {
+    return null; // TODO
+  }
+
+  public Command createDriveUntilCommand(ChassisSpeeds chassisSpeeds, double timeUntilFinished) {
+    return null; // TODO
+  }
+
+  public Command createDriveUntilCommand(ChassisSpeeds chassisSpeeds, Pose2d destination, Pose2d destinationTolerance) {
+    return null; // TODO
+  }
+
+  public void setDefaultCommand() {
+    // TODO
   }
 
   @Override
@@ -51,7 +63,7 @@ public class DriveSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  //initSendable handles Dashboard
+  // initSendable handles Dashboard
   @Override
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
