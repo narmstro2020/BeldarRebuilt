@@ -8,6 +8,12 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.subsystems.arm.ArmSubsystem;
+import frc.robot.subsystems.arm.ArmSubsystemReal;
+import frc.robot.subsystems.arm.ArmSubsystemSim;
+import frc.robot.subsystems.elevator.ElevatorSubsystem;
+import frc.robot.subsystems.elevator.ElevatorSubsystemReal;
+import frc.robot.subsystems.elevator.ElevatorSubsystemSim;
 import frc.robot.subsystems.grabber.GrabberSubsystem;
 import frc.robot.subsystems.grabber.GrabberSubsystemReal;
 import frc.robot.subsystems.grabber.GrabberSubsystemSim;
@@ -42,6 +48,30 @@ public class RobotContainer {
     grabberSubsystem.setDefaultCommand();
     SmartDashboard.putData(grabberSubsystem);
     SmartDashboard.putData(grabberSubsystem.createDriveAtVelocityCommand(750));
+
+    ElevatorSubsystem elevatorSubsystem = RobotBase.isSimulation()
+        ? new ElevatorSubsystemSim()
+        : new ElevatorSubsystemReal();
+    elevatorSubsystem.setDefaultCommand(elevatorSubsystem.createDriveAtVelocityCommand(0.0));
+    SmartDashboard.putData(elevatorSubsystem);
+    SmartDashboard.putData(elevatorSubsystem.createTurnToPositionCommand(0.5));
+    SmartDashboard.putData(elevatorSubsystem.createTurnToPositionCommand(0.25));
+    SmartDashboard.putData(elevatorSubsystem.createTurnToPositionCommand(0.75));
+    SmartDashboard.putData(elevatorSubsystem.createDriveAtVelocityCommand(0.50));
+    SmartDashboard.putData(elevatorSubsystem.createDriveAtVelocityCommand(-0.50));
+    SmartDashboard.putData(elevatorSubsystem.createDriveAtVelocityCommand(1.00));
+
+    ArmSubsystem armSubsystem = RobotBase.isSimulation()
+        ? new ArmSubsystemSim()
+        : new ArmSubsystemReal();
+    armSubsystem.setDefaultCommand(armSubsystem.createDriveAtVelocityCommand(0.0));
+    SmartDashboard.putData(armSubsystem);
+    SmartDashboard.putData(armSubsystem.createTurnToPositionCommand(-20));
+    SmartDashboard.putData(armSubsystem.createTurnToPositionCommand(45));
+    SmartDashboard.putData(armSubsystem.createTurnToPositionCommand(60));
+    SmartDashboard.putData(armSubsystem.createDriveAtVelocityCommand(2000));
+    SmartDashboard.putData(armSubsystem.createDriveAtVelocityCommand(1));
+    SmartDashboard.putData(armSubsystem.createDriveAtVelocityCommand(-2));
   }
 
   public Command getAutonomousCommand() {

@@ -2,31 +2,33 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems.elevator;
+package frc.robot.subsystems.arm;
 
-public class ElevatorSubsystemSim extends ElevatorSubsystem {
+public final class ArmSubsystemSim extends ArmSubsystem {
 
         private static final class Constants {
                 // TODO: create an int called numMotors and set to 1
                 // TODO: create a DCMotor called dcMotor and initialize with DCMotor.getNEO
                 private static final double kS = 0.0;
-                // TODO: create a double called minHeightMeters and initialize to 0.0
-                // TODO: create a double called maxHeightMeters and initialize to 1.0
+                // TODO: create a double called minAngleRads and initialize to
+                // Math.toRadians(-38)
+                // TODO: create a double called maxAngleRads and initialize to
+                // Math.toRadians(80)
                 // TODO: create a boolean called simulateGravity and initialize to true
-                // TODO: create a double called startingHeightMeter and initialize to 0.0
+                // TODO: create a double called startingAngleRads and initialize to 0.0
         }
 
         // TODO: create a SimDouble field called simRotations
         // TODO: create a SimDouble field called simRPM
         // TODO: create a SimDouble field called simCurrent
         // TODO: create a SimDouble field called simVolts
-        // TODO: create an ElevatorSim field called elevatorSim
+        // TODO: create an SingleJointedArmSim field called singleJointedArmSim
 
-        public ElevatorSubsystemSim() {
+        public ArmSubsystemSim() {
                 super(Constants.kS);
-                // TODO: initialize elevatorSim with appropriate constants
+                // TODO: initialize singleJointedArmSim with appropriate constants
                 // TODO: create a SimDevice object called simDevice and initialize with
-                // SimDevice.create("NEO", ElevatorSubsystem.Constants.deviceId);
+                // SimDevice.create("NEO", ArmSubsystem.Constants.deviceId);
                 // TODO: initialize simRotations with simDevice.createDouble("Rotations",
                 // Direction.kBidir, 0.0);
                 // TODO: initialize simRPM with simDevice.createDouble("RPM", Direction.kBidir,
@@ -37,36 +39,32 @@ public class ElevatorSubsystemSim extends ElevatorSubsystem {
                 // Direction.kBidir, 0.0);
         }
 
-        @Override
-        public double getPositionMeters() {
-                // TODO: return getPositionMeters() from elevatorSim
+        public double getAngleRads() {
+                // TODO: return getAngleRads() from singleJointedArmSim
                 return 0.0; // TODO: remove this line when done
         }
 
-        @Override
-        public double getVelocityMetersPerSecond() {
-                // TODO: return getVelocityMetersPerSecond() from elevatorSim
+        public double getVelocityRadPerSec() {
+                // TODO: return getVelocityRadPerSec() from singleJointedArmSim
                 return 0.0; // TODO: remove this line when done
-
         }
 
-        @Override
-        public void setPositionMeters(double meters) {
-                //TODO: setState for elevatorSim to meters and getVelocityMetersPerSecond()
+        public void setAngleRads(double radians) {
+                //TODO: setState for singleJointedArmSim to radians and getVelocityRadPerSec()
         }
 
         @Override
         public void setInputVoltage(double voltage) {
-                // TODO: setInputVoltage for elevatorSim using voltage
+                // TODO: setInputVoltage for singleJointedArmSim using voltage
                 // TODO: set simVolts to voltage
         }
 
         // Method runs stuff on subsystem that must change all of the time.
         @Override
         public void periodic() {
-                // TODO: update elevatorSim with dtSeconds
-                // TODO: set simRotations with getPosition() * gearing / 2 / pi / drumRadius
-                // TODO: set simRPM with getVelocity() * gearing * 60 / 2 / pi / drumRadius
+                // TODO: update singleJointedArmSim with dtSeconds
+                // TODO: set simRotations with getAngleRads() * gearing / 2 / pi
+                // TODO: set simRPM with getVelocityRadPerSec() * gearing * 60 / 2 / pi / drumRadius
                 // TODO: set simCurrent with getCurrentDrawAmps() from elevatorSim
         }
 }
