@@ -4,33 +4,39 @@
 
 package frc.robot.subsystems.arm;
 
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.controller.LinearQuadraticRegulator;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.math.system.LinearSystem;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public abstract class ArmSubsystem extends SubsystemBase {
 
         protected static final class Constants {
-                // TODO: create a double called dtSeconds and initialize to 0.020
-                // TODO: create an int called deviceId and initialize to 15
-                // TODO: create a double called gearing and initialize to 64
-                // TODO: create a double called kG and initialize to 0.01839
-                // TODO: create a double called kV and initialize to 1.215936
-                // TODO: create a double called kA and initialize to 0.0368736
-                // TODO: create a double called maxPositionErrorRadians and initialize to 0.125
-                // TODO: create a double called maxVelocityRadiansPerSec and intialize to 1
-                // TODO: create a LinearSystem<N2, N1, N1> called positionPlant and initialize
-                // to LinearSystemId.identifyPositionSystem()
-                // TODO: create a Vector<N2> called positionQelms and intialize to
-                // VecBuilder.fill(maxPositionErrorRadians, maxVelocityErrorRadiansPerSec)
-                // TODO: create a Vector<N1> called positionRelms and initialize to
-                // VecBuilder.fill(RobotController.getBatteryVoltage())
-                // TODO: create a LinearQuadraticRegular<N2, N1, N1> called positionController
-                // and initialize with previous constants
-                // TODO: create a LinearSystem<N1, N1, N1> called velocityPlant and initialize
-                // to LinearSystemId.identifyVelocitySystem()
-                // TODO: create a Vector<N1> called velocityQelms and intialize to
-                // VecBuilder.fill(maxVelocityErrorRadiansPerSec)
+                double dtSeconds = 0.020;
+                int deviceId = 15;
+                double gearing = 64;
+                double kG = 0.01839;
+                double kV = 1.215936;
+                double kA = 0.0368736;
+                double maxPositionErrorRadians = 0.125;
+                double maxVelocityErrorRadiansPerSec = 1;
+                LinearSystem<N2, N1, N1> positionPlant = LinearSystemId.identifyPositionSystem(kV, kA);
+                Vector<N2> positionQelms = VecBuilder.fill(maxPositionErrorRadians, maxVelocityErrorRadiansPerSec);
+                Vector<N1> positionRelms = VecBuilder.fill(RobotController.getBatteryVoltage());
+                LinearQuadraticRegulator<N2, N1, N1> positionController = new LinearQuadraticRegulator<>(
+                        positionPlant, 
+                        positionQelms, 
+                        positionRelms, 
+                        dtSeconds); 
+                LinearSystem<N1, N1, N1> velocityPlant = LinearSystemId.identifyVelocitySystem(kV, kA);
+                Vector<N1> velocityQuelms = VecBuilder.fill(maxVelocityErrorRadiansPerSec);
                 // TODO: create a Vector<N1> called velocityQelms and initialize to
                 // VecBuilder.fill(RobotController.getBatteryVoltage())
                 // TODO: create a LinearQuadraticRegulator<N1, N1, N1> called velocityController
