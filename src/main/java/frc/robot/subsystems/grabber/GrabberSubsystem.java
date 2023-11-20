@@ -8,12 +8,15 @@ public abstract class GrabberSubsystem extends SubsystemBase {
 
   protected static class Constants {
     protected static final double dtSeconds = 0.020;
-    // TODO: create an integer called leftGripperDeviceId and set equal to 14
-    // TODO: create an integer called rightGripperDeviceId and set equal to 24
-    // TODO: create a double called gearing and set equal to 12
-    // TODO: create a double called kV and set equal to 0.121272
-    // TODO: create a double called kA and set equal to 0.00251016
-    // TODO: create a double called maxVelocityErrorRadPerSec and set equal to 46.3
+    private final static int leftGripperDeviceId = 14;
+    private final static int rightGripperDeviceId = 24;
+    private final static double gearing = 12;
+    private final static double kV = 0.121272;
+    private final static double kA = 0.00251016;
+    private final static double maxVelocityErrorRadPerSec = 46.3;
+
+    // private final LinearSystem<N1, N1, N1> plant, initalize
+
     // TODO: create a LinearSystem<N1, N1, N1> called plant and initialize to
     // LinearSystemId.identifyVelocitySystem
     // TODO: create a Vector<N1> called qelms and initialize to
@@ -21,10 +24,9 @@ public abstract class GrabberSubsystem extends SubsystemBase {
     // TODO: create a Vector<N1> called relms and initialize to
     // VecBuilder.fill(RobotController.getBatteryVoltage())
     // TODO: create a LinearQuadraticRegulator<N1, N1, N1> called velocityController
-    // TODO: create a double called kPVelocity and set equal to
-    // velocityController.getK().get(0, 0)
-    // TODO: create a double called KIVelocity and set equal to 0.0
-    // TODO: create a double called KDVelocity and set equal to 0.0
+    double kPVelocity = velocityController.getK().get(0, 0);
+    double KIVelocity = 0.0;
+    double KDVelocity = 0.0;
   }
 
   // fields
@@ -63,23 +65,19 @@ public abstract class GrabberSubsystem extends SubsystemBase {
   public double getLeftGripperAccelerationRadPerSecondSquared() {
     // TODO: create a double called currentVelocity and get from leftGripperSim in
     // radpersec
-    // TODO: return (currentVelocity - lastVelocityLeftGripper) / 0.020
-    return 0.0; // TODO: remove this line when done
+    return (currentVelocity - lastVelocityLeftGripper) / 0.020
   }
 
   public double getRightGripperAccelerationRadPerSecondSquared() {
     // TODO: create a double called currentVelocity and get from rightGripperSim in
     // radpersec
-    // TODO: return (currentVelocity - lastVelocityRightGripper) / 0.020
-    return 0.0; // TODO: remove this line when done
+    return (currentVelocity - lastVelocityRightGripper) / 0.020
   }
 
   // control methods
   public void driveLeftGripperAtVelocity(double rpm) {
-    // TODO: create a double called measurementVelocity and get from
-    // getLeftGripperVelocityRadPerSec
-    // TODO: create a double called setpoint and get from
-    // Units.rotationsPerMinuteToRadiansPerSecond(rpm)
+    double measurementVelocity = getLeftGripperVelocityRadPerSec();
+    double setpoint = Units.rotationsPerMinutetoRadiansPerSecond(rpm);
     // TODO: create a State called current and use measurementVelocity for position
     // and getLeftGripperAcceleration for velocity
     // TODO: create a State called goal and use setpoint for position and 0.0 for
