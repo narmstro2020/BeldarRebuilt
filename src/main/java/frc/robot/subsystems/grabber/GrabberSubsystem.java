@@ -11,8 +11,8 @@ public abstract class GrabberSubsystem extends SubsystemBase {
     // TODO: create an integer called leftGripperDeviceId and set equal to 14
     // TODO: create an integer called rightGripperDeviceId and set equal to 24
     // TODO: create a double called gearing and set equal to 12
-    // TODO: create a double called kV and set equal to 0.010106 * gearing
-    // TODO: create a double called kA and set equal to 0.00020918 * gearing
+    // TODO: create a double called kV and set equal to 0.121272
+    // TODO: create a double called kA and set equal to 0.00251016
     // TODO: create a double called maxVelocityErrorRadPerSec and set equal to 46.3
     // TODO: create a LinearSystem<N1, N1, N1> called plant and initialize to
     // LinearSystemId.identifyVelocitySystem

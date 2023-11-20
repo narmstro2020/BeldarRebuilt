@@ -15,7 +15,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.LinearSystemSim;
 
 /** Represents a simulated DC motor mechanism. */
-public class SteerSim extends LinearSystemSim<N2, N1, N2> {
+public class ModuleSteerSim extends LinearSystemSim<N2, N1, N2> {
   // Gearbox for the DC motor.
   private final DCMotor m_gearbox;
 
@@ -30,7 +30,7 @@ public class SteerSim extends LinearSystemSim<N2, N1, N2> {
    * @param gearing The gearing of the DC motor (numbers greater than 1 represent
    *                reductions).
    */
-  public SteerSim(double kV, double kA, DCMotor gearbox) {
+  public ModuleSteerSim(double kV, double kA, DCMotor gearbox) {
     super(new LinearSystem<>(
         Matrix.mat(Nat.N2(), Nat.N2())
             .fill(
@@ -55,7 +55,7 @@ public class SteerSim extends LinearSystemSim<N2, N1, N2> {
    * @param gearing The gearing of the DC motor (numbers greater than 1 represent
    *                reductions).
    */
-  public SteerSim(double kV, double kA, DCMotor gearbox, Matrix<N2, N1> measurementStdDevs) {
+  public ModuleSteerSim(double kV, double kA, DCMotor gearbox, Matrix<N2, N1> measurementStdDevs) {
     super(new LinearSystem<>(
         Matrix.mat(Nat.N2(), Nat.N2())
             .fill(
@@ -80,7 +80,7 @@ public class SteerSim extends LinearSystemSim<N2, N1, N2> {
    * @param gearing The gearing of the DC motor (numbers greater than 1 represent
    *                reductions).
    */
-  public SteerSim(LinearSystem<N2, N1, N2> plant, DCMotor gearbox, double gearing) {
+  public ModuleSteerSim(LinearSystem<N2, N1, N2> plant, DCMotor gearbox, double gearing) {
     super(plant);
     m_gearbox = gearbox;
   }
@@ -96,7 +96,7 @@ public class SteerSim extends LinearSystemSim<N2, N1, N2> {
    *                           represent reductions).
    * @param measurementStdDevs The standard deviations of the measurements.
    */
-  public SteerSim(
+  public ModuleSteerSim(
       LinearSystem<N2, N1, N2> plant,
       DCMotor gearbox,
       double gearing,
@@ -117,7 +117,7 @@ public class SteerSim extends LinearSystemSim<N2, N1, N2> {
    *                         {@link #WheelSim(LinearSystem, DCMotor, double, Matrix)}
    *                         constructor.
    */
-  public SteerSim(DCMotor gearbox, double gearing, double jKgMetersSquared) {
+  public ModuleSteerSim(DCMotor gearbox, double gearing, double jKgMetersSquared) {
     super(new LinearSystem<>(
         Matrix.mat(Nat.N2(), Nat.N2())
             .fill(
@@ -147,7 +147,7 @@ public class SteerSim extends LinearSystemSim<N2, N1, N2> {
    *                           constructor.
    * @param measurementStdDevs The standard deviations of the measurements.
    */
-  public SteerSim(
+  public ModuleSteerSim(
       DCMotor gearbox, double gearing, double jKgMetersSquared, Matrix<N2, N1> measurementStdDevs) {
     super(new LinearSystem<>(
         Matrix.mat(Nat.N2(), Nat.N2())
