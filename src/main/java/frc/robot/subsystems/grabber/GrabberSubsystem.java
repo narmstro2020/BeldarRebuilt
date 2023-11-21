@@ -1,6 +1,16 @@
 package frc.robot.subsystems.grabber;
 
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.controller.LinearQuadraticRegulator;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.system.LinearSystem;
+import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -15,31 +25,24 @@ public abstract class GrabberSubsystem extends SubsystemBase {
     private final static double kA = 0.00251016;
     private final static double maxVelocityErrorRadPerSec = 46.3;
 
-    // private final LinearSystem<N1, N1, N1> plant, initalize
-
-    // TODO: create a LinearSystem<N1, N1, N1> called plant and initialize to
-    // LinearSystemId.identifyVelocitySystem
-    // TODO: create a Vector<N1> called qelms and initialize to
-    // VecBuilder.fill(maxVelocityErrorRadPerSec)
-    // TODO: create a Vector<N1> called relms and initialize to
-    // VecBuilder.fill(RobotController.getBatteryVoltage())
-    // TODO: create a LinearQuadraticRegulator<N1, N1, N1> called velocityController
+    LinearSystem<N1, N1, N1> plant = LinearSystemId.identifyVelocitySystem(kV,kA);
+    Vector<N1> qelms = VecBuilder.fill(maxVelocityErrorRadPerSec);
+    Vector<N1> relms = VecBuilder.fill(RobotController.getBatteryVoltage());
+    LinearQuadraticRegulator<N1, N1, N1> velocityController;
     double kPVelocity = velocityController.getK().get(0, 0);
     double KIVelocity = 0.0;
     double KDVelocity = 0.0;
   }
 
   // fields
-  // TODO: declare a TrapezoidProfile variable for leftTrapezoidProfile
-  // TODO: declare a TrapezoidProfile variable for rightTrapezoidProfile
-  // TODO: declare a PIDController variable for leftVelocityPIDController
-  // TODO: declare a PIDController variable for rightVelocityPIDController
-  // TODO: declare a SimpleMotorFeedforward variable for
-  // leftSimpleMotorFeedforward
-  // TODO: declare a SimpleMotorFeedforward varialbe for
-  // rightSimpleMotorFeedForward
-  // TODO: declare a variable called lastVelocityLeftGripper
-  // TODO: declare a variable called lastVelocityRightGripper
+  private final TrapezoidProfile leftTrapezoidProfile;
+  private final TrapezoidProfile rightTrapezoidProfile;
+  private final PIDController leftVelocityPIDController;
+  private final PIDController rightVelocityPIDController;
+  private final SimpleMotorFeedforward leftSimpleMotorFeedforward;
+  private final SimpleMotorFeedforward rightSimpleMotorFeedforward;
+  private double lastVelocityLeftGripper;
+  private double lastVelocityRightGripper;  
 
   // constructor
   public GrabberSubsystem(double kS) {
