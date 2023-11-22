@@ -19,6 +19,11 @@ import frc.robot.subsystems.grabber.GrabberSubsystemReal;
 import frc.robot.subsystems.grabber.GrabberSubsystemSim;
 
 public class RobotContainer {
+
+  private static final class Constants{
+
+  }
+
   public RobotContainer() {
     configureBindings();
   }
@@ -45,33 +50,26 @@ public class RobotContainer {
     GrabberSubsystem grabberSubsystem = RobotBase.isSimulation()
         ? new GrabberSubsystemSim()
         : new GrabberSubsystemReal();
-    grabberSubsystem.setDefaultCommand();
-    SmartDashboard.putData(grabberSubsystem);
-    SmartDashboard.putData(grabberSubsystem.createDriveAtVelocityCommand(750));
+    // TODO: set grabberSubsystem's default command.  You have a method for this so use the one with no args
+    // TODO: use the putData method for the SmartDashboard on the grabberSubsystems
+    // TODO: use the putData method for the SmartDashboard to put a DriveAtVelocityCommand() with rpm set to 750
 
+    
     ElevatorSubsystem elevatorSubsystem = RobotBase.isSimulation()
         ? new ElevatorSubsystemSim()
         : new ElevatorSubsystemReal();
-    elevatorSubsystem.setDefaultCommand(elevatorSubsystem.createDriveAtVelocityCommand(0.0));
-    SmartDashboard.putData(elevatorSubsystem);
-    SmartDashboard.putData(elevatorSubsystem.createTurnToPositionCommand(0.5));
-    SmartDashboard.putData(elevatorSubsystem.createTurnToPositionCommand(0.25));
-    SmartDashboard.putData(elevatorSubsystem.createTurnToPositionCommand(0.75));
-    SmartDashboard.putData(elevatorSubsystem.createDriveAtVelocityCommand(0.50));
-    SmartDashboard.putData(elevatorSubsystem.createDriveAtVelocityCommand(-0.50));
-    SmartDashboard.putData(elevatorSubsystem.createDriveAtVelocityCommand(1.00));
+    // TODO: set elevatorSubsystem's default command.  You have a method for this so use the one with no args
+    // TODO: use the putData method for the SmartDashboard on the elevatorSubsystem
+    // TODO: use the putData method to create a MoveToPositionCommand for 0.5 meters.  You'll also do this again for 0.25, 0.75
+    // TODO: use the putData method to create a DriveAtVelocity for 0.50 metersPerSecond, also do for -0.5, and 1.0
 
     ArmSubsystem armSubsystem = RobotBase.isSimulation()
         ? new ArmSubsystemSim()
         : new ArmSubsystemReal();
-    armSubsystem.setDefaultCommand(armSubsystem.createDriveAtVelocityCommand(0.0));
-    SmartDashboard.putData(armSubsystem);
-    SmartDashboard.putData(armSubsystem.createTurnToPositionCommand(-20));
-    SmartDashboard.putData(armSubsystem.createTurnToPositionCommand(45));
-    SmartDashboard.putData(armSubsystem.createTurnToPositionCommand(60));
-    SmartDashboard.putData(armSubsystem.createDriveAtVelocityCommand(2000));
-    SmartDashboard.putData(armSubsystem.createDriveAtVelocityCommand(1));
-    SmartDashboard.putData(armSubsystem.createDriveAtVelocityCommand(-2));
+    // TODO: set armSubsystem's default command.  You have a method for this so use the one with no args.  
+    // TODO: use SmartDashboards putData method on the armSubsystem
+    // TODO: use the putData method again to create a TurnToPositionCommand for -20, 45 and 60 degrees.  You'll use multiple times
+    // TODO: use the putData method again to create a DriveAVelocityCommand for 1, -2, and 10 degreesPerSecond
   }
 
   public Command getAutonomousCommand() {
