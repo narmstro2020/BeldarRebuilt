@@ -47,7 +47,7 @@ public class Manipulator {
         tiltSubsystem = new TiltSubsystem();
     }
 
-    public void addToSmartDashboard() {
+    public void addToDashboard() {
         SmartDashboard.putData(armSubsystem);
         SmartDashboard.putData(elevatorSubsystem);
         SmartDashboard.putData(grabberSubsystem);
@@ -63,6 +63,10 @@ public class Manipulator {
 
     public void addMechanism2dWidget() {
         // TODO:
+    }
+
+    public void addTestingCommandsToDashboard(){
+
     }
 
     public void bindArmManualControlToController(
