@@ -1,6 +1,8 @@
 package frc.robot.subsystems.tilt;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -14,23 +16,26 @@ public class TiltSubsystem extends SubsystemBase {
   }
 
   private static final class Constants {
-    // TODO: create PneumaticsModuleType set equal to PneumaticsModuletype.REVPH
-    // TODO: create integer for moduleNumber set equal to 17
-    // TODO: create integer for shortChannel set equal to 2
-    // TODO: create integer for longChannel set equal to 3
+    private static final PneumaticsModuleType moduleType = PneumaticsModuleType.REVPH; 
+    private static final int module = 17;
+    private static final int shortChannel = 2;
+    private static final int longChannel = 3;
   }
 
   // fields
-  // TODO: declare Solenoid variable for shortSolenoid
-  // TODO: declare Solenoid variable for longSolenoid
+  private final Solenoid shortSolenoid;
+  private final Solenoid longSolenoid;
   // constructor
   public TiltSubsystem() {
-    // TODO: initialize shortSolenoid with appropriate constants
-    // TODO: initialize longSolenoid with appropriate constants
+    shortSolenoid = new Solenoid(Constants.module, Constants.moduleType, Constants.shortChannel);
+    longSolenoid = new Solenoid(Constants.module, Constants.moduleType, Constants.shortChannel);
   }
 
   // telemetry methods
   public State getState() {
+    if (shortSolenoid.get() && longSolenoid.get()) {
+      return State.FULL;
+  } else
     // TODO: if both the shortSolenoid and longSolenoid are true then return
     // State.FULL,
     // TODO: else if the shortSolenoid is true and the longSolenoid is false then
