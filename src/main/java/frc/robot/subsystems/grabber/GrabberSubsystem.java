@@ -9,6 +9,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,13 +26,17 @@ public abstract class GrabberSubsystem extends SubsystemBase {
     private final static double kA = 0.00251016;
     private final static double maxVelocityErrorRadPerSec = 46.3;
 
-    LinearSystem<N1, N1, N1> plant = LinearSystemId.identifyVelocitySystem(kV,kA);
-    Vector<N1> qelms = VecBuilder.fill(maxVelocityErrorRadPerSec);
-    Vector<N1> relms = VecBuilder.fill(RobotController.getBatteryVoltage());
-    LinearQuadraticRegulator<N1, N1, N1> velocityController;
-    double kPVelocity = velocityController.getK().get(0, 0);
-    double KIVelocity = 0.0;
-    double KDVelocity = 0.0;
+    private final static LinearSystem<N1, N1, N1> plant = LinearSystemId.identifyVelocitySystem(kV,kA);
+    private final static  Vector<N1> qelms = VecBuilder.fill(maxVelocityErrorRadPerSec);
+    private final static Vector<N1> relms = VecBuilder.fill(RobotController.getBatteryVoltage());
+    private final static LinearQuadraticRegulator<N1, N1, N1> velocityController = new LinearQuadraticRegulator<>(
+      plant, 
+      qelms, 
+      relms, 
+      dtSeconds);
+    private final static double kPVelocity = velocityController.getK().get(0, 0);
+    private final static double KIVelocity = 0.0;
+    private final static  double KDVelocity = 0.0;
   }
 
   // fields
@@ -46,14 +51,17 @@ public abstract class GrabberSubsystem extends SubsystemBase {
 
   // constructor
   public GrabberSubsystem(double kS) {
-    // TODO: initialize leftSimpleMotorFeedForward with appropriate constants
-    // TODO: intialize rightSimpleMotorFeedForward with approrpiate constants
-    // TODO: initialize leftTrapezoidProfile with appropriate constants
-    // TODO: intialize rightTrapezoidProfile with appropriate constants
-    // TODO: initialize leftVelocityPIDController with appropriate constants
-    // TODO: initailize rightVelocityPIDController with appropriate constants
-    // TODO: initialize lastVelocityLeftGripper to 0.0
-    // TODO: initialize lastVelocityRightGripper to 0.0
+    var leftSimpleMotorFeedForward = new SimpleMotorFeedforward(kS, Constants.kV, Constants.kA);
+    var rightSimpleMotorFeedForward = new SimpleMotorFeedforward(kS, Constants.kV, Constants.kA);
+    var maxVelocity = leftSimpleMotorFeedForward.maxAchievableVelocity(12, 0);
+    var maxAcceleration = leftSimpleMotorFeedForward.maxAchievableAcceleration(12, 0);
+    var constraints = new TrapezoidProfile.Constraints(maxVelocity, maxAcceleration);
+    var leftTrapezoidProfile = new TrapezoidProfile(constraints);
+    var rightTrapezoidProfile = new TrapezoidProfile(constraints);
+    var leftVelocityPIDController = new PIDController(Constants.kPVelocity, Constants.KIVelocity, Constants.KDVelocity);
+    var rightVelocityPIDController =  new PIDController(Constants.kPVelocity, Constants.KIVelocity, Constants.KDVelocity);
+    double lastVelocityLeftGripper = 0.0;
+    double lastVelocityRightGripper = 0.0;
   }
 
   // telemetry methods
@@ -68,13 +76,13 @@ public abstract class GrabberSubsystem extends SubsystemBase {
   public double getLeftGripperAccelerationRadPerSecondSquared() {
     // TODO: create a double called currentVelocity and get from leftGripperSim in
     // radpersec
-    return (currentVelocity - lastVelocityLeftGripper) / 0.020
+    return (currentVelocity - lastVelocityLeftGripper) / 0.020;
   }
 
   public double getRightGripperAccelerationRadPerSecondSquared() {
     // TODO: create a double called currentVelocity and get from rightGripperSim in
     // radpersec
-    return (currentVelocity - lastVelocityRightGripper) / 0.020
+    return (currentVelocity - lastVelocityRightGripper) / 0.020;
   }
 
   // control methods
