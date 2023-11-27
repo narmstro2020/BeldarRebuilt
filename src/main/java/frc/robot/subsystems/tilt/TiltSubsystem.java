@@ -35,7 +35,9 @@ public class TiltSubsystem extends SubsystemBase {
   public State getState() {
     if (shortSolenoid.get() && longSolenoid.get()) {
       return State.FULL;
-  } else
+  } else if(!shortSolenoid.get() && longSolenoid.get()){
+    return State.LONG;
+  }
     // TODO: if both the shortSolenoid and longSolenoid are true then return
     // State.FULL,
     // TODO: else if the shortSolenoid is true and the longSolenoid is false then
