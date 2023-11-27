@@ -16,7 +16,7 @@ public class TiltSubsystem extends SubsystemBase {
   }
 
   private static final class Constants {
-    private static final PneumaticsModuleType moduleType = PneumaticsModuleType.REVPH; 
+    private static final PneumaticsModuleType moduleType = PneumaticsModuleType.REVPH;
     private static final int module = 17;
     private static final int shortChannel = 2;
     private static final int longChannel = 3;
@@ -25,6 +25,7 @@ public class TiltSubsystem extends SubsystemBase {
   // fields
   private final Solenoid shortSolenoid;
   private final Solenoid longSolenoid;
+
   // constructor
   public TiltSubsystem() {
     shortSolenoid = new Solenoid(Constants.module, Constants.moduleType, Constants.shortChannel);
@@ -35,40 +36,38 @@ public class TiltSubsystem extends SubsystemBase {
   public State getState() {
     if (shortSolenoid.get() && longSolenoid.get()) {
       return State.FULL;
-  } else if(!shortSolenoid.get() && longSolenoid.get()){
-    return State.LONG;
-  }
-    // TODO: if both the shortSolenoid and longSolenoid are true then return
-    // State.FULL,
-    // TODO: else if the shortSolenoid is true and the longSolenoid is false then
-    // return
-    // State.SHORT
-    // TODO: else if the shortSolenoid is false and the longSolenoid is true then
-    // return
-    // State.LONG
-    // TODO: else return State.NONE
-    return null; // TODO: remove this line when done
+    } else if (!shortSolenoid.get() && longSolenoid.get()) {
+      return State.SHORT;
+    } else if (shortSolenoid.get() && !longSolenoid.get()) {
+      return State.LONG;
+    } else {
+      return State.NONE;
+    }
   }
 
   // control methods
   public void setState(State state) {
-    // TODO: if state equals State.FULL then set both solenoids to true
-    // TODO: else if state equals State.LONG then set longSolenoid to true and
-    // shortSolenoid to false
-    // TODO: else if state equals State.SHORT then set longSolenoid to false and
-    // shortSolenoid to true
-    // TODO: else set them both to false
+    if(state == State.FULL){
+      shortSolenoid.set(true);
+      longSolenoid.set(true);
+    } else if(state == State.LONG){
+      shortSolenoid.set(false);
+      longSolenoid.set(true);
+    }else if(state == State.SHORT){
+      shortSolenoid.set(true);
+      longSolenoid.set(false);
+    } else {
+      shortSolenoid.set(false);
+      longSolenoid.set(false);
+    }
   }
 
   // command creation methods
   public Command createSetStateCommand(State state) {
-    // TODO: create a Runnable called tiltSetCommandRunnable set equal to () ->
-    // setState(state)
-    // TODO: create a Command called tiltSetCommand set equal to
-    // runOnce(tiltSetCommandRunnable)
-    // TODO: setName for tiltSetCommand to "Tilt " + state.name()
-    // TODO: return tiltSetCommand
-    return null; // TODO: remove this line when done
+    Runnable tiltSet = () -> setState(state);
+    Command tiltSetCommand = runOnce(tiltSet);
+    tiltSetCommand.setName("Tilt " + state.name());
+    return tiltSetCommand;
   }
 
   @Override
