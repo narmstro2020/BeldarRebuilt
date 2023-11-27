@@ -9,6 +9,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.RobotController;
@@ -51,15 +52,15 @@ public abstract class GrabberSubsystem extends SubsystemBase {
 
   // constructor
   public GrabberSubsystem(double kS) {
-    var leftSimpleMotorFeedForward = new SimpleMotorFeedforward(kS, Constants.kV, Constants.kA);
-    var rightSimpleMotorFeedForward = new SimpleMotorFeedforward(kS, Constants.kV, Constants.kA);
-    var maxVelocity = leftSimpleMotorFeedForward.maxAchievableVelocity(12, 0);
-    var maxAcceleration = leftSimpleMotorFeedForward.maxAchievableAcceleration(12, 0);
+    leftSimpleMotorFeedforward = new SimpleMotorFeedforward(kS, Constants.kV, Constants.kA);
+    rightSimpleMotorFeedforward = new SimpleMotorFeedforward(kS, Constants.kV, Constants.kA);
+    var maxVelocity = leftSimpleMotorFeedforward.maxAchievableVelocity(12, 0);
+    var maxAcceleration = leftSimpleMotorFeedforward.maxAchievableAcceleration(12, 0);
     var constraints = new TrapezoidProfile.Constraints(maxVelocity, maxAcceleration);
-    var leftTrapezoidProfile = new TrapezoidProfile(constraints);
-    var rightTrapezoidProfile = new TrapezoidProfile(constraints);
-    var leftVelocityPIDController = new PIDController(Constants.kPVelocity, Constants.KIVelocity, Constants.KDVelocity);
-    var rightVelocityPIDController =  new PIDController(Constants.kPVelocity, Constants.KIVelocity, Constants.KDVelocity);
+    leftTrapezoidProfile = new TrapezoidProfile(constraints);
+    rightTrapezoidProfile = new TrapezoidProfile(constraints);
+    leftVelocityPIDController = new PIDController(Constants.kPVelocity, Constants.KIVelocity, Constants.KDVelocity);
+    rightVelocityPIDController =  new PIDController(Constants.kPVelocity, Constants.KIVelocity, Constants.KDVelocity);
     double lastVelocityLeftGripper = 0.0;
     double lastVelocityRightGripper = 0.0;
   }
@@ -74,34 +75,33 @@ public abstract class GrabberSubsystem extends SubsystemBase {
   public abstract double getRightGripperVelocityRadPerSec();
 
   public double getLeftGripperAccelerationRadPerSecondSquared() {
-    // TODO: create a double called currentVelocity and get from leftGripperSim in
-    // radpersec
+    double currentVelocity = getLeftGripperVelocityRadPerSec();
     return (currentVelocity - lastVelocityLeftGripper) / 0.020;
   }
 
   public double getRightGripperAccelerationRadPerSecondSquared() {
-    // TODO: create a double called currentVelocity and get from rightGripperSim in
-    // radpersec
+    double currentVelocity = getRightGripperVelocityRadPerSec();
     return (currentVelocity - lastVelocityRightGripper) / 0.020;
   }
 
   // control methods
   public void driveLeftGripperAtVelocity(double rpm) {
     double measurementVelocity = getLeftGripperVelocityRadPerSec();
-    double setpoint = Units.rotationsPerMinutetoRadiansPerSecond(rpm);
-    // TODO: create a State called current and use measurementVelocity for position
-    // and getLeftGripperAcceleration for velocity
-    // TODO: create a State called goal and use setpoint for position and 0.0 for
-    // velocity
-    // TODO: create a State called achievableSetpoint and calculate from
-    // leftTrapezoidProfile.
-    // TODO: create a double called feedbackVoltage enad calculate from
-    // leftVelocityPIDController using measurement Velocity and
-    // achievableSetpoint.position
+    double setpoint = Units.rotationsPerMinuteToRadiansPerSecond(rpm);
+    State current = new State(measurementVelocity, getLeftGripperAccelerationRadPerSecondSquared());
+    State goal = new State(setpoint, 0.0);
+    State achievableSetpoint = leftTrapezoidProfile.calculate(Constants.dtSeconds, goal, current);
+    double feedbackVoltage = leftSimpleMotorFeedforward.calculate(measurementVelocity, achievableSetpoint.position);
+
     // TODO: create a double called feedforwardVoltage and get from
     // leftSimpleMotorFeedForward using measurementVelocity,
     // achievableSetpoint.position, and dtSeconds
-    // TODO: create a double called voltage and add two previous voltages
+
+    double feedforwardVoltage = getleftSimpleMotorFeedforward(measurementVelocity, achievableSetpoint, Constants.dtSeconds);
+    
+    double voltage = feedforwardVoltage + feedbackVoltage; 
+    double leftSimVolts = voltage;
+
     // TODO: set leftSimVolts to voltage
     // TODO: setInputVoltage on leftGripperSim
   }
