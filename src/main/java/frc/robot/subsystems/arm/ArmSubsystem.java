@@ -36,22 +36,20 @@ public abstract class ArmSubsystem extends SubsystemBase {
                         positionRelms, 
                         dtSeconds); 
                 LinearSystem<N1, N1, N1> velocityPlant = LinearSystemId.identifyVelocitySystem(kV, kA);
-                Vector<N1> velocityQuelms = VecBuilder.fill(maxVelocityErrorRadiansPerSec);
-                // TODO: create a Vector<N1> called velocityQelms and initialize to
-                // VecBuilder.fill(RobotController.getBatteryVoltage())
-                // TODO: create a LinearQuadraticRegulator<N1, N1, N1> called velocityController
-                // and intialize with appropriate constants
-                // TODO: create a double called kPPosition and initialize to
-                // positionController.getK().get(0, 0);
-                // TODO: create a double called kIPosition and intialize to 0.0
-                // TODO: create a double called kDPosition and initialize to
-                // positionController.getK().get(0, 1);
-                // TODO: create a double called kPVelocity and initialize to
-                // velocityController.getK().get(0, 0);
-                // TODO: create a double called kIVelocity and initialize to 0.0
-                // TODO: create a double called kDVelocity and initialize to 0.0
-                // TODO: create a double called tolerance and initialize to 0.0239 * 2 * Math.PI
-                // / gearing
+                Vector<N1> velocityQelms = VecBuilder.fill(maxVelocityErrorRadiansPerSec);
+                Vector<N1> velocityRelms = VecBuilder.fill(RobotController.getBatteryVoltage());
+                LinearQuadraticRegulator<N1, N1, N1> velocityController = new LinearQuadraticRegulator<>(
+                        velocityPlant,
+                        velocityQelms,
+                        velocityRelms, 
+                        dtSeconds);
+                double kPPosition = positionController.getK().get(0, 0);
+                double kIPosition = 0.0;
+                double kDPosition = positionController.getK().get(0, 1);
+                double kPVelocity = velocityController.getK().get(0, 0);
+                double kIVelocity = 0.0;
+                double kDVelocity = 0.0;
+                double tolerance = 0.0239 * 2 * Math.PI / gearing;
         }
 
         // TODO: create a field of type PIDController called positionPIDController
