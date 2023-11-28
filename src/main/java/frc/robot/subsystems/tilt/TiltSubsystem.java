@@ -29,7 +29,7 @@ public class TiltSubsystem extends SubsystemBase {
   // constructor
   public TiltSubsystem() {
     shortSolenoid = new Solenoid(Constants.module, Constants.moduleType, Constants.shortChannel);
-    longSolenoid = new Solenoid(Constants.module, Constants.moduleType, Constants.shortChannel);
+    longSolenoid = new Solenoid(Constants.module, Constants.moduleType, Constants.longChannel);
   }
 
   // telemetry methods
@@ -37,9 +37,9 @@ public class TiltSubsystem extends SubsystemBase {
     if (shortSolenoid.get() && longSolenoid.get()) {
       return State.FULL;
     } else if (!shortSolenoid.get() && longSolenoid.get()) {
-      return State.SHORT;
-    } else if (shortSolenoid.get() && !longSolenoid.get()) {
       return State.LONG;
+    } else if (shortSolenoid.get() && !longSolenoid.get()) {
+      return State.SHORT;
     } else {
       return State.NONE;
     }
