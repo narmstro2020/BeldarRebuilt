@@ -92,22 +92,21 @@ public abstract class GrabberSubsystem extends SubsystemBase {
     State goal = new State(setpoint, 0.0);
     State achievableSetpoint = leftTrapezoidProfile.calculate(Constants.dtSeconds, goal, current);
     double feedbackVoltage = leftSimpleMotorFeedforward.calculate(measurementVelocity, achievableSetpoint.position);
-
-    // TODO: create a double called feedforwardVoltage and get from
-    // leftSimpleMotorFeedForward using measurementVelocity,
-    // achievableSetpoint.position, and dtSeconds
-
-    double feedforwardVoltage = getleftSimpleMotorFeedforward(measurementVelocity, achievableSetpoint, Constants.dtSeconds);
-    
+    double feedforwardVoltage = leftSimpleMotorFeedforward.calculate(measurementVelocity,achievableSetpoint.position, Constants.dtSeconds);
     double voltage = feedforwardVoltage + feedbackVoltage; 
-    double leftSimVolts = voltage;
-
-    // TODO: set leftSimVolts to voltage
-    // TODO: setInputVoltage on leftGripperSim
+    setLeftGripperInputVoltage(voltage);
   }
 
   public void driveRightGripperAtVelocity(double rpm) {
-    // TODO: same code as driveLeftGripperAtVelocity but for rightGripper
+    double measurementVelocity = getRightGripperVelocityRadPerSec();
+    double setpoint = Units.rotationsPerMinuteToRadiansPerSecond(rpm);
+    State current = new State(measurementVelocity, getRightGripperAccelerationRadPerSecondSquared());
+    State goal = new State(setpoint, 0.0);
+    State achievableSetpoint = rightTrapezoidProfile.calculate(Constants.dtSeconds, goal, current);
+    double feedbackVoltage = rightSimpleMotorFeedforward.calculate(measurementVelocity, achievableSetpoint.position);
+    double feedforwardVoltage = rightSimpleMotorFeedforward.calculate(measurementVelocity,achievableSetpoint.position, Constants.dtSeconds);
+    double voltage = feedforwardVoltage + feedbackVoltage; 
+    setRightGripperInputVoltage(voltage);
   }
 
   public abstract void setLeftGripperInputVoltage(double voltage);
@@ -116,12 +115,18 @@ public abstract class GrabberSubsystem extends SubsystemBase {
 
   // command creation methods
   public Command createDriveAtVelocityCommand(double rpm) {
-    // TODO: create a Runnable called resetVelocityPIDControllersCommandRunnable and
-    // reset both PIDControllers
-    // TODO: create a runOnce command called resetVelocityPIDControllersCommand
-    // using previous runnable
+    Runnable resetVelocityPIDController = () -> {
+      leftVelocityPIDController.reset();
+      rightVelocityPIDController.reset();;
+    };
+    Command resetVelocityPIDControllerCommand = runOnce(resetVelocityPIDController);
+
     // TODO: create a Runnable called driveGrabberAtVelocityCommandRunnable and set
     // left to rpm and right to -rpm
+
+    // Runnable driveGrabberAtVelocity = () -> {
+    //   leftrpm
+    // }
     // TODO: create a run command called driveGrabberAtVelocityCommand using
     // previous runnable
     // TODO: create a runnable called stopGrabberCommandRunnable that sets each
@@ -134,12 +139,13 @@ public abstract class GrabberSubsystem extends SubsystemBase {
   }
 
   public void setDefaultCommand() {
-    // TODO: this.setDefaultCommand(createDriveAtVelocityCommand(0.0))
+    this.setDefaultCommand(createDriveAtVelocityCommand(0.0));
   }
 
   @Override
   public void periodic() {
-    // TODO: lastVelocityLeftGripper = getLeftGripperVelocityRadPerSec and also for right
+    lastVelocityLeftGripper = getLeftGripperVelocityRadPerSec();
+    lastVelocityRightGripper = getRightGripperVelocityRadPerSec();
   }
 
   // initSendable handles Dashboard
