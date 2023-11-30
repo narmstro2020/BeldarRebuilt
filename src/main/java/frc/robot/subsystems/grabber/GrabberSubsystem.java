@@ -120,22 +120,19 @@ public abstract class GrabberSubsystem extends SubsystemBase {
       rightVelocityPIDController.reset();;
     };
     Command resetVelocityPIDControllerCommand = runOnce(resetVelocityPIDController);
-
-    // TODO: create a Runnable called driveGrabberAtVelocityCommandRunnable and set
-    // left to rpm and right to -rpm
-
-    // Runnable driveGrabberAtVelocity = () -> {
-    //   leftrpm
-    // }
-    // TODO: create a run command called driveGrabberAtVelocityCommand using
-    // previous runnable
-    // TODO: create a runnable called stopGrabberCommandRunnable that sets each
-    // Gripper's inputVoltage to 0 and each simVolts to 0
-    // TODO: create a Command called commmand set equal to
-    // resetVelocityPIDControllesCommand.andThen(driveGrabberAtVelocityCommand).finallyDo(stopGrabberCommandRunnable)
+    Runnable driveGrabberAtVelocity = () -> {
+      driveLeftGripperAtVelocity(rpm);
+      driveRightGripperAtVelocity(-rpm);
+    };
+    Command driveGrabberAtVelocityCommand = run(driveGrabberAtVelocity);
+    Runnable stopGrabber = () -> {
+      setLeftGripperInputVoltage(0);
+      setRightGripperInputVoltage(0);
+    };
+    Command command = resetVelocityPIDControllerCommand.andThen(driveGrabberAtVelocityCommand).finallyDo(stopGrabber);
     // TODO: setName of command to "Drive at " + rpm
-    // TODO: return command
-    return null; // TODO: remove this line when done
+
+    return command;
   }
 
   public void setDefaultCommand() {

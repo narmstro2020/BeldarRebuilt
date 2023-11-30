@@ -1,20 +1,31 @@
 package frc.robot.subsystems.grabber;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+
 public class GrabberSubsystemReal extends GrabberSubsystem {
 
   private static final class Constants {
     private static final double kS = 0.23971;
-    // TODO: create a MotorType called motorType and set equal to
-    // MotorType.kBrushless
+    MotorType motorType = MotorType.kBrushless;
   }
 
+
   // fields
-  // TODO: declare a CANSparkMax called leftGripperCanSparkMax
-  // TODO: declare a CANSparkMax called rightGripperCanSparkMax
+  private CANSparkMax leftGripperCanSparkMax;
+  private CANSparkMax rightGripperCanSparkMax;
 
   // constructor
   public GrabberSubsystemReal() {
     super(Constants.kS);
+    leftGripperCanSparkMax = new CANSparkMax(Constants.kS);
+
+
+
+
+
     // TODO: initialize leftGripperCanSparkMax with appropriate constants
     // TODO: initialize rightGripperCanSparkMax with appropriate constants
   }
