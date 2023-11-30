@@ -1,50 +1,47 @@
 package frc.robot.subsystems.grabber;
 
+import edu.wpi.first.hal.SimDevice;
+import edu.wpi.first.hal.SimDouble;
+import edu.wpi.first.hal.SimDevice.Direction;
+import edu.wpi.first.math.proto.Plant;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.simulation.FlywheelSim;
+
 public class GrabberSubsystemSim extends GrabberSubsystem {
 
   private static final class Constants {
-    // TODO: create an integer called numMotorsPerGripper and set equal to 1
-    // TODO: create a DCMotor called dcMotor and initialize with DCMotor.getNeo550
+    private final static int numMotorsPerGripper = 1;
+    private final static DCMotor dcmotor = DCMotor.getNeo550(numMotorsPerGripper);
     private static final double kS = 0.0;
   }
 
   // fields
-  // TODO: declare a SimDouble variable for leftSimRotations
-  // TODO: declare a SimDouble variable for leftSimRPM
-  // TODO: declare a SimDouble variable for leftSimCurrent
-  // TODO: declare a SimDouble variable for leftSimVolts
-  // TODO: declare a SimDouble variable for rightSimRotations
-  // TODO: declare a SimDouble variable for rightSimRPM
-  // TODO: declare a SimDouble variable for rightSimCurrent
-  // TODO: declare a SimDouble variable for rightSimVolts
-  // TODO: declare a FlyWheelSim variable for leftGripperSim: import the one from
-  // frc.robot
-  // TODO: declare a FlyWheelSim variable for rightGripperSim
+  SimDouble leftSimRotations;
+  SimDouble leftSimRPM;
+  SimDouble leftSimCurrent;
+  SimDouble leftSimVolts;
+  SimDouble rightSimrotations;
+  SimDouble rightSimRPM;
+  SimDouble rightSimCurrent;
+  SimDouble rightSimVolts;
+  FlywheelSim leftGripperSim;
+  FlywheelSim rightGripperSim;
 
   // constructor
   public GrabberSubsystemSim() {
     super(Constants.kS);
-    // TODO: create a SimDevice called leftSimDevice and set equal to
-    // SimDevice.create("NEO550", Constants.leftGripperDeviceId)
-    // TODO: create a SimDevice called rightSimDevice and set equal to
-    // SimDevice.create("NEO550", Constants.leftGripperDeviceId)
-    // TODO: initialize leftSimRotations to leftSimDevice.createDouble("Rotations",
-    // Direction.kBidir, 0.0)
-    // TODO: initialize leftSimRPM to leftSimDevice.createDouble("RPM",
-    // Direction.kBidir, 0.0)
-    // TODO: initialize leftSimCurrent to leftSimDevice.createDouble("Amps",
-    // Direction.kBidir, 0.0)
-    // TODO: initialize leftSimVolts to leftSimDevice.createDouble("Volts",
-    // Direction.kBidir, 0.0)
-    // TODO: initialize rightSimRotations to
-    // rightSimDevice.createDouble("Rotations",
-    // Direction.kBidir, 0.0)
-    // TODO: initialize rightSimRPM to rightSimDevice.createDouble("RPM",
-    // Direction.kBidir, 0.0)
-    // TODO: initialize rightSimCurrent to rightSimDevice.createDouble("Amps",
-    // Direction.kBidir, 0.0)
-    // TODO: initialize rightSimVolts to rightSimDevice.createDouble("Volts",
-    // Direction.kBidir, 0.0)
+    SimDevice leftSimDevice = SimDevice.create("NEO550", 1);
+    SimDevice rightSimDevice = SimDevice.create("NEO550", 2);
+    var leftSimRotations = leftSimDevice.createDouble("Rotations",Direction.kBidir, 0.0);
+    var leftSimRPM = leftSimDevice.createDouble("RPM", Direction.kBidir, 0.0);
+    var leftSimCurrent = leftSimDevice.createDouble("Amps", Direction.kBidir, 0.0);
+    var leftSimVolts = leftSimDevice.createDouble("volts", Direction.kBidir, 0.0);
+    var rightSimRotations = rightSimDevice.createDouble("Rotations", Direction.kBidir, 0.0);
+    var rightSimRPM = rightSimDevice.createDouble("RPM", Direction.kBidir , 0.0);
+    var rightSimCurrent = rightSimDevice.createDouble("Amps", Direction.kBidir, 0.0);
+    var rightSimVolts = rightSimDevice.createDouble("Volts", Direction.kBidir, 0.0);
+
+    // leftGripperSim(Constants.dcmotor, GrabberSubsystem.Constants.gearing);
     // TODO: initialize leftGripperSim with appropriate constants
     // TODO: intialize rightGripperSim with appropriate constants
   }

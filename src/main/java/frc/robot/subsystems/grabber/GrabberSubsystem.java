@@ -22,7 +22,7 @@ public abstract class GrabberSubsystem extends SubsystemBase {
     protected static final double dtSeconds = 0.020;
     private final static int leftGripperDeviceId = 14;
     private final static int rightGripperDeviceId = 24;
-    private final static double gearing = 12;
+    final static double gearing = 12;
     private final static double kV = 0.121272;
     private final static double kA = 0.00251016;
     private final static double maxVelocityErrorRadPerSec = 46.3;
@@ -120,18 +120,20 @@ public abstract class GrabberSubsystem extends SubsystemBase {
       rightVelocityPIDController.reset();;
     };
     Command resetVelocityPIDControllerCommand = runOnce(resetVelocityPIDController);
+
     Runnable driveGrabberAtVelocity = () -> {
       driveLeftGripperAtVelocity(rpm);
       driveRightGripperAtVelocity(-rpm);
     };
     Command driveGrabberAtVelocityCommand = run(driveGrabberAtVelocity);
+
     Runnable stopGrabber = () -> {
       setLeftGripperInputVoltage(0);
       setRightGripperInputVoltage(0);
     };
     Command command = resetVelocityPIDControllerCommand.andThen(driveGrabberAtVelocityCommand).finallyDo(stopGrabber);
-    // TODO: setName of command to "Drive at " + rpm
 
+    command.setName("Drive at " + rpm);
     return command;
   }
 
