@@ -20,24 +20,24 @@ public abstract class GrabberSubsystem extends SubsystemBase {
 
   protected static class Constants {
     protected static final double dtSeconds = 0.020;
-    private final static int leftGripperDeviceId = 14;
-    private final static int rightGripperDeviceId = 24;
+    final static int leftGripperDeviceId = 14;
+    final static int rightGripperDeviceId = 24;
     final static double gearing = 12;
     private final static double kV = 0.121272;
     private final static double kA = 0.00251016;
     private final static double maxVelocityErrorRadPerSec = 46.3;
 
     private final static LinearSystem<N1, N1, N1> plant = LinearSystemId.identifyVelocitySystem(kV,kA);
-    private final static  Vector<N1> qelms = VecBuilder.fill(maxVelocityErrorRadPerSec);
+    private final static Vector<N1> qelms = VecBuilder.fill(maxVelocityErrorRadPerSec);
     private final static Vector<N1> relms = VecBuilder.fill(RobotController.getBatteryVoltage());
-    private final static LinearQuadraticRegulator<N1, N1, N1> velocityController = new LinearQuadraticRegulator<>(
+     final static LinearQuadraticRegulator<N1, N1, N1> velocityController = new LinearQuadraticRegulator<>(
       plant, 
       qelms, 
       relms, 
       dtSeconds);
     private final static double kPVelocity = velocityController.getK().get(0, 0);
     private final static double KIVelocity = 0.0;
-    private final static  double KDVelocity = 0.0;
+    private final static double KDVelocity = 0.0;
   }
 
   // fields
@@ -61,8 +61,8 @@ public abstract class GrabberSubsystem extends SubsystemBase {
     rightTrapezoidProfile = new TrapezoidProfile(constraints);
     leftVelocityPIDController = new PIDController(Constants.kPVelocity, Constants.KIVelocity, Constants.KDVelocity);
     rightVelocityPIDController =  new PIDController(Constants.kPVelocity, Constants.KIVelocity, Constants.KDVelocity);
-    double lastVelocityLeftGripper = 0.0;
-    double lastVelocityRightGripper = 0.0;
+    lastVelocityLeftGripper = 0.0;
+    lastVelocityRightGripper = 0.0;
   }
 
   // telemetry methods

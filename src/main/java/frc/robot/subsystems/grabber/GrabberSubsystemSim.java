@@ -32,67 +32,91 @@ public class GrabberSubsystemSim extends GrabberSubsystem {
     super(Constants.kS);
     SimDevice leftSimDevice = SimDevice.create("NEO550", 1);
     SimDevice rightSimDevice = SimDevice.create("NEO550", 2);
-    var leftSimRotations = leftSimDevice.createDouble("Rotations",Direction.kBidir, 0.0);
-    var leftSimRPM = leftSimDevice.createDouble("RPM", Direction.kBidir, 0.0);
-    var leftSimCurrent = leftSimDevice.createDouble("Amps", Direction.kBidir, 0.0);
-    var leftSimVolts = leftSimDevice.createDouble("volts", Direction.kBidir, 0.0);
-    var rightSimRotations = rightSimDevice.createDouble("Rotations", Direction.kBidir, 0.0);
-    var rightSimRPM = rightSimDevice.createDouble("RPM", Direction.kBidir , 0.0);
-    var rightSimCurrent = rightSimDevice.createDouble("Amps", Direction.kBidir, 0.0);
-    var rightSimVolts = rightSimDevice.createDouble("Volts", Direction.kBidir, 0.0);
+    leftSimRotations = leftSimDevice.createDouble("Rotations",Direction.kBidir, 0.0);
+    leftSimRPM = leftSimDevice.createDouble("RPM", Direction.kBidir, 0.0);
+    leftSimCurrent = leftSimDevice.createDouble("Amps", Direction.kBidir, 0.0);
+    leftSimVolts = leftSimDevice.createDouble("volts", Direction.kBidir, 0.0);
+    rightSimrotations = rightSimDevice.createDouble("Rotations", Direction.kBidir, 0.0);
+    rightSimRPM = rightSimDevice.createDouble("RPM", Direction.kBidir , 0.0);
+    rightSimCurrent = rightSimDevice.createDouble("Amps", Direction.kBidir, 0.0);
+    rightSimVolts = rightSimDevice.createDouble("Volts", Direction.kBidir, 0.0);
+    
 
-    // leftGripperSim(Constants.dcmotor, GrabberSubsystem.Constants.gearing);
+
+
+
+
+
+
+
+
+    leftGripperSim = new FlywheelSim(
+    GrabberSubsystem.Constants.LinearSystem<N1,​N1,​N1> plant,
+    Constants.dcmotor, 
+    GrabberSubsystem.Constants.gearing
+    
+
+
+// leftGripperSim(Constants.dcmotor, GrabberSubsystem.Constants.gearing);
     // TODO: initialize leftGripperSim with appropriate constants
     // TODO: intialize rightGripperSim with appropriate constants
+
+
+
+
+
+  );
+    
   }
 
   // telemetry methods
   @Override
   public double getLeftGripperVelocityRPM() {
-    // TODO: use the getAngularVelocityRPM method from leftGripperSim to return the
-    // RPM
-    return 0.0; // TODO: remove this line when done
+    return leftGripperSim.getAngularVelocityRPM();
   }
 
   @Override
   public double getLeftGripperVelocityRadPerSec() {
-    // TODO: use the getAngularVelocityRadPerSec method from leftGripperSim to
-    // return
-    return 0.0; // TODO: remove this line when done
+    return leftGripperSim.getAngularVelocityRadPerSec();
   }
 
   @Override
   public double getRightGripperVelocityRPM() {
-    // TODO: use the getAngularVelocityRPM method from rightGripperSim to return the
-    // RPM
-    return 0.0; // TODO: remove this line when done
+    return rightGripperSim.getAngularVelocityRPM();
   }
 
   @Override
   public double getRightGripperVelocityRadPerSec() {
-    // TODO: use the getAngularVelocityRadPerSec method from rightGripperSim to
-    // return
-    return 0.0; // TODO: remove this line when done
+    return rightGripperSim.getAngularVelocityRPM();
   }
 
   // control methods
   @Override
   public void setLeftGripperInputVoltage(double voltage) {
-    // TODO: set leftSimVolts to voltage
-    // TODO: setInputVoltage for leftGripperSim to voltage
+    leftSimVolts.set(voltage);
+    leftGripperSim.setInputVoltage(voltage);
   }
 
   @Override
   public void setRightGripperInputVoltage(double voltage) {
-    // TODO: set rightSimVolts to voltage
-    // TODO: setInputVoltage for rightGripperSim to voltage
+    rightSimVolts.set(voltage);
+    rightGripperSim.setInputVoltage(voltage);
   }
 
   @Override
   public void periodic() {
-    // TODO: update leftGripperSim
-    // TODO: update rightGripperSim
-    // TODO: set all SimDoubles, rotations and velocities form methods (multiply by
+    leftGripperSim.update(GrabberSubsystem.Constants.dtSeconds);
+    rightGripperSim.update(GrabberSubsystem.Constants.dtSeconds);
+
+  leftSimRotations.set(GrabberSubsystem.Constants.gearing);
+  leftSimRPM.set(GrabberSubsystem.Constants.gearing);
+  leftSimCurrent.set(GrabberSubsystem.Constants.gearing);
+  leftSimVolts.set(GrabberSubsystem.Constants.gearing);
+  rightSimrotations.set(GrabberSubsystem.Constants.gearing);
+  rightSimRPM.set(GrabberSubsystem.Constants.gearing);
+  rightSimCurrent.set(GrabberSubsystem.Constants.gearing);
+  rightSimVolts.set(GrabberSubsystem.Constants.gearing);
+    // TODO: set all SimDoubles, rotations and velocities from methods (multiply by
     // gearing)
   }
 }

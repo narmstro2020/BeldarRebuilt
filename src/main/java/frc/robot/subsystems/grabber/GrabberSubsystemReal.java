@@ -3,13 +3,13 @@ package frc.robot.subsystems.grabber;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 
 public class GrabberSubsystemReal extends GrabberSubsystem {
 
   private static final class Constants {
     private static final double kS = 0.23971;
-    MotorType motorType = MotorType.kBrushless;
+    private static final MotorType motorType = MotorType.kBrushless;
   }
 
   // fields
@@ -19,8 +19,8 @@ public class GrabberSubsystemReal extends GrabberSubsystem {
   // constructor
   public GrabberSubsystemReal() {
     super(Constants.kS);
-    CANSparkMax leftGripperCanSparkMax = new CANSparkMax(1,MotorType.kBrushless);
-    CANSparkMax rightGripperCanSparkMax = new CANSparkMax(1,MotorType.kBrushless);
+    leftGripperCanSparkMax = new CANSparkMax(GrabberSubsystem.Constants.leftGripperDeviceId,Constants.motorType);
+    rightGripperCanSparkMax = new CANSparkMax(GrabberSubsystem.Constants.rightGripperDeviceId,Constants.motorType);
   }
 
   // telemetry methods
@@ -31,8 +31,7 @@ public class GrabberSubsystemReal extends GrabberSubsystem {
 
   @Override
   public double getLeftGripperVelocityRadPerSec() {
-    return getLeftGripperVelocityRPM() / 60;
-    // TODO:  Use the Units class to convert RPM from getLeftGripperVelocityRPM() to RadPerSec
+    return Units.rotationsPerMinuteToRadiansPerSecond(getLeftGripperVelocityRPM());
   }
 
   @Override
@@ -42,20 +41,17 @@ public class GrabberSubsystemReal extends GrabberSubsystem {
 
   @Override
   public double getRightGripperVelocityRadPerSec() {
-    return getLeftGripperVelocityRPM() / 60;
-    // TODO:  Use the Units class to convert RPM from getRightGripperVelocityRPM() to RadPerSec
+    return Units.rotationsPerMinuteToRadiansPerSecond(getRightGripperVelocityRPM());
   }
 
   @Override
   public void setLeftGripperInputVoltage(double voltage) {
-    
-    // TODO: use the setVoltage Method for the leftCanSparkMax
-    // leftGripperCanSparkMax(voltage);
+    leftGripperCanSparkMax.setVoltage(voltage);
   }
 
   @Override
   public void setRightGripperInputVoltage(double voltage) {
-    // TODO: use the setVoltage Method for the rightCanSparkMax
+    rightGripperCanSparkMax.setVoltage(voltage);
   }
 
   @Override
