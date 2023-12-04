@@ -143,8 +143,6 @@ public abstract class GrabberSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    lastVelocityLeftGripper = getLeftGripperVelocityRadPerSec();
-    lastVelocityRightGripper = getRightGripperVelocityRadPerSec();
   }
 
   // initSendable handles Dashboard
