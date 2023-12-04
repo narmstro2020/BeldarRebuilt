@@ -18,10 +18,15 @@ public class Manipulator {
     // ClawSubsystem
     // TODO: KEITH: create a private final field for tiltSubsystem of type
     // TiltSubsystem
+    // TODO: BRADEN: create a private final field for grabberSubsystem of type
+    // GrabberSubsystem.
 
     public Manipulator() {
         // TODO: ANGEL: initialize clawSubsystem to new ClawSubsystem();
         // TODO: KEITH: initialize tiltSubsystem to new TiltSubsystem();
+        // TODO: BRADEN: initialize grabberSubsystem to new GrabberSubsystemReal if real
+        // and GrabberSubsystemSim if simulated.
+        // use RobotBase.isSimulation() in your if statement
     }
 
     public void addToDashboard() {
@@ -29,10 +34,13 @@ public class Manipulator {
         // the Dashboard
         // TODO: KEITH: use the SmartDashboard.putData() method to put tiltSubsystem to
         // the Dashboard
+        // TODO: BRADEN: use the SmartDashboard.putData() method to put the
+        // grabberSubsystem to the Dashboard.
 
     }
 
     public void setDefaultCommands() {
+        // TODO: BRADEN: call grabberSubsystem's setDefaultCommand.  The one that takes no arguments that you made.  
 
     }
 
@@ -54,6 +62,13 @@ public class Manipulator {
         // createSetStateCommand()
         // TODO: KEITH create a Command called testNONEcommand using tiltSubsystem's
         // createSetStateCommand()
+
+        // TODO: BRADEN create a Command called testGrabber750RPMCommand using grabberSubsystem's
+        // createDriveAtVelocityCommand()
+        // TODO: BRADEN create a Command called testGrabberMinus650RPMCommand using grabberSubsystem's
+        // createDriveAtVelocityCommand()
+
+
 
     }
 
@@ -98,17 +113,20 @@ public class Manipulator {
         // createSetStateCommand from tiltSubsystem;
         // TODO: KEITH: create a Command called noneCommand and initialize with the
         // createSetStateCommand from tiltSubsystem;
-        // TODO: KEITH: bind the fullTrigger to the fullCommand with fullTrigger's onTrue method
-
+        // TODO: KEITH: bind the fullTrigger to the fullCommand with fullTrigger's
+        // onTrue method
 
     }
 
     public void bindClawManualControlToController(
-            CommandXboxController controller, 
+            CommandXboxController controller,
             XboxController.Button button) {
-        // TODO:  ANGEL: create a Command called toggleCommand using clawSubsystems createToggleCommand method
-        // TODO:  ANGEL: create a Trigger called trigger and initialize to controller.button(button.value)
-        // TODO:  ANGEL: bind the trigger to the toggleCommand using trigger's onTrue method.  
+        // TODO: ANGEL: create a Command called toggleCommand using clawSubsystems
+        // createToggleCommand method
+        // TODO: ANGEL: create a Trigger called trigger and initialize to
+        // controller.button(button.value)
+        // TODO: ANGEL: bind the trigger to the toggleCommand using trigger's onTrue
+        // method.
 
     }
 
