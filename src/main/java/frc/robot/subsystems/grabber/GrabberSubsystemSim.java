@@ -3,9 +3,8 @@ package frc.robot.subsystems.grabber;
 import edu.wpi.first.hal.SimDevice;
 import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.hal.SimDevice.Direction;
-import edu.wpi.first.math.proto.Plant;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.wpilibj.simulation.FlywheelSim;
+import frc.com.simulation.FlywheelSim;
 
 public class GrabberSubsystemSim extends GrabberSubsystem {
 
@@ -40,33 +39,16 @@ public class GrabberSubsystemSim extends GrabberSubsystem {
     rightSimRPM = rightSimDevice.createDouble("RPM", Direction.kBidir , 0.0);
     rightSimCurrent = rightSimDevice.createDouble("Amps", Direction.kBidir, 0.0);
     rightSimVolts = rightSimDevice.createDouble("Volts", Direction.kBidir, 0.0);
-    
-
-
-
-
-
-
-
-
 
     leftGripperSim = new FlywheelSim(
-    GrabberSubsystem.Constants.LinearSystem<N1,​N1,​N1> plant,
-    Constants.dcmotor, 
-    GrabberSubsystem.Constants.gearing
-    
+      GrabberSubsystem.Constants.kV, 
+      GrabberSubsystem.Constants.kA, 
+      Constants.dcmotor);
 
-
-// leftGripperSim(Constants.dcmotor, GrabberSubsystem.Constants.gearing);
-    // TODO: initialize leftGripperSim with appropriate constants
-    // TODO: intialize rightGripperSim with appropriate constants
-
-
-
-
-
-  );
-    
+    rightGripperSim = new FlywheelSim(
+      GrabberSubsystem.Constants.kV, 
+      GrabberSubsystem.Constants.kA, 
+      Constants.dcmotor);
   }
 
   // telemetry methods
@@ -108,15 +90,11 @@ public class GrabberSubsystemSim extends GrabberSubsystem {
     leftGripperSim.update(GrabberSubsystem.Constants.dtSeconds);
     rightGripperSim.update(GrabberSubsystem.Constants.dtSeconds);
 
-  leftSimRotations.set(GrabberSubsystem.Constants.gearing);
-  leftSimRPM.set(GrabberSubsystem.Constants.gearing);
-  leftSimCurrent.set(GrabberSubsystem.Constants.gearing);
-  leftSimVolts.set(GrabberSubsystem.Constants.gearing);
-  rightSimrotations.set(GrabberSubsystem.Constants.gearing);
-  rightSimRPM.set(GrabberSubsystem.Constants.gearing);
-  rightSimCurrent.set(GrabberSubsystem.Constants.gearing);
-  rightSimVolts.set(GrabberSubsystem.Constants.gearing);
-    // TODO: set all SimDoubles, rotations and velocities from methods (multiply by
-    // gearing)
+  leftSimRotations.set(leftGripperSim.getAngularPositionRad() * GrabberSubsystem.Constants.gearing / 2 / Math.PI);
+  leftSimRPM.set(getLeftGripperVelocityRPM() * GrabberSubsystem.Constants.gearing);
+  leftSimCurrent.set(leftGripperSim.getCurrentDrawAmps());
+  rightSimrotations.set(rightGripperSim.getAngularPositionRad() * GrabberSubsystem.Constants.gearing / 2 / Math.PI);
+  rightSimRPM.set(getRightGripperVelocityRPM() * GrabberSubsystem.Constants.gearing);
+  rightSimCurrent.set(rightGripperSim.getCurrentDrawAmps());
   }
 }

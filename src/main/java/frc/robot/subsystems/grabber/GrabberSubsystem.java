@@ -20,17 +20,17 @@ public abstract class GrabberSubsystem extends SubsystemBase {
 
   protected static class Constants {
     protected static final double dtSeconds = 0.020;
-    final static int leftGripperDeviceId = 14;
-    final static int rightGripperDeviceId = 24;
-    final static double gearing = 12;
-    private final static double kV = 0.121272;
-    private final static double kA = 0.00251016;
+    protected final static int leftGripperDeviceId = 14;
+    protected final static int rightGripperDeviceId = 24;
+    protected final static double gearing = 12;
+    protected final static double kV = 0.121272;
+    protected final static double kA = 0.00251016;
     private final static double maxVelocityErrorRadPerSec = 46.3;
 
-    private final static LinearSystem<N1, N1, N1> plant = LinearSystemId.identifyVelocitySystem(kV,kA);
+    final static LinearSystem<N1, N1, N1> plant = LinearSystemId.identifyVelocitySystem(kV,kA);
     private final static Vector<N1> qelms = VecBuilder.fill(maxVelocityErrorRadPerSec);
     private final static Vector<N1> relms = VecBuilder.fill(RobotController.getBatteryVoltage());
-     final static LinearQuadraticRegulator<N1, N1, N1> velocityController = new LinearQuadraticRegulator<>(
+    protected final static LinearQuadraticRegulator<N1, N1, N1> velocityController = new LinearQuadraticRegulator<>(
       plant, 
       qelms, 
       relms, 
