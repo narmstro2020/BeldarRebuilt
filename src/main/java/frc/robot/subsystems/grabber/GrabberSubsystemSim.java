@@ -29,8 +29,8 @@ public class GrabberSubsystemSim extends GrabberSubsystem {
   // constructor
   public GrabberSubsystemSim() {
     super(Constants.kS);
-    SimDevice leftSimDevice = SimDevice.create("NEO550", 1);
-    SimDevice rightSimDevice = SimDevice.create("NEO550", 2);
+    SimDevice leftSimDevice = SimDevice.create("NEO550", GrabberSubsystem.Constants.leftGripperDeviceId);
+    SimDevice rightSimDevice = SimDevice.create("NEO550",  GrabberSubsystem.Constants.rightGripperDeviceId);
     leftSimRotations = leftSimDevice.createDouble("Rotations",Direction.kBidir, 0.0);
     leftSimRPM = leftSimDevice.createDouble("RPM", Direction.kBidir, 0.0);
     leftSimCurrent = leftSimDevice.createDouble("Amps", Direction.kBidir, 0.0);
