@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.subsystems.tilt.TiltSubsystem;
 
 public class Manipulator {
 
@@ -16,14 +17,15 @@ public class Manipulator {
 
     // TODO: ANGEL: create a private final field for clawSubsystem of type
     // ClawSubsystem
-    // TODO: KEITH: create a private final field for tiltSubsystem of type
-    // TiltSubsystem
+    private final TiltSubsystem tiltSubsystem; 
+
     // TODO: BRADEN: create a private final field for grabberSubsystem of type
     // GrabberSubsystem.
 
     public Manipulator() {
         // TODO: ANGEL: initialize clawSubsystem to new ClawSubsystem();
         // TODO: KEITH: initialize tiltSubsystem to new TiltSubsystem();
+        tiltSubsystem = new TiltSubsystem();
         // TODO: BRADEN: initialize grabberSubsystem to new GrabberSubsystemReal if real
         // and GrabberSubsystemSim if simulated.
         // use RobotBase.isSimulation() in your if statement
