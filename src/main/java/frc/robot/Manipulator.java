@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.tilt.TiltSubsystem;
 
 public class Manipulator {
@@ -57,7 +58,7 @@ public class Manipulator {
         // createSetStateCommand()
         // TODO: ANGEL create a Command called testCLOSEDCommand using clawSubsystem's
         // createSetStateCommand()
-          
+
         Command testFULLCommand = tiltSubsystem.createSetStateCommand(TiltSubsystem.State.FULL);
         SmartDashboard.putData(testFULLCommand);    
 
@@ -102,16 +103,21 @@ public class Manipulator {
 
     }
 
-    public void bindTiltManualControlToControllerPOV(
-            CommandXboxController controller) {
-        // TODO: KEITH: create a Trigger called fullTrigger and initialize with
-        // controller.povUp();
+    public void bindTiltManualControlToControllerPOV(CommandXboxController controller) {
+        Trigger fullTrigger = controller.povUp();
+        Trigger longTrigger = controller.povLeft();
+        Trigger shortTrigger = controller.povRight();
+        Trigger NoneTrigger = controller.povDown();
+
         // TODO: KEITH: create a Trigger called longTrigger and initialize with
         // controller.povUp();
         // TODO: KEITH: create a Trigger called shortTrigger and initialize with
         // controller.povRight();
         // TODO: KEITH: create a Trigger called NoneTrigger and initialize with
         // controller.povDown();
+        Command fullCommand = tiltSubsystem.createSetStateCommand(TiltSubsystem.State.FULL);
+        Command longCommand = tiltSubsystem.createSetStateCommand(TiltSubsystem.State.LONG);
+        Command shortCommand = tiltSubsystem.createSetStateCommand(TiltSubsystem.State.SHORT);
         // TODO: KEITH: create a Command called fullCommand and initialize with the
         // createSetStateCommand from tiltSubsystem;
         // TODO: KEITH: create a Command called longCommand and initialize with the
@@ -120,6 +126,7 @@ public class Manipulator {
         // createSetStateCommand from tiltSubsystem;
         // TODO: KEITH: create a Command called noneCommand and initialize with the
         // createSetStateCommand from tiltSubsystem;
+        fullTrigger.onTrue(fullCommand);
         // TODO: KEITH: bind the fullTrigger to the fullCommand with fullTrigger's
         // onTrue method
 
