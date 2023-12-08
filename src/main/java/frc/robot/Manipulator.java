@@ -1,6 +1,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.tilt.TiltSubsystem;
 
@@ -24,7 +26,6 @@ public class Manipulator {
 
     public Manipulator() {
         // TODO: ANGEL: initialize clawSubsystem to new ClawSubsystem();
-        // TODO: KEITH: initialize tiltSubsystem to new TiltSubsystem();
         tiltSubsystem = new TiltSubsystem();
         // TODO: BRADEN: initialize grabberSubsystem to new GrabberSubsystemReal if real
         // and GrabberSubsystemSim if simulated.
@@ -35,6 +36,7 @@ public class Manipulator {
         // TODO: ANGEL: use the SmartDashboard.putData() method to put clawSubsystem to
         // the Dashboard
         // TODO: KEITH: use the SmartDashboard.putData() method to put tiltSubsystem to
+        SmartDashboard.putData(tiltSubsystem);
         // the Dashboard
         // TODO: BRADEN: use the SmartDashboard.putData() method to put the
         // grabberSubsystem to the Dashboard.
@@ -55,16 +57,19 @@ public class Manipulator {
         // createSetStateCommand()
         // TODO: ANGEL create a Command called testCLOSEDCommand using clawSubsystem's
         // createSetStateCommand()
+          
+        Command testFULLCommand = tiltSubsystem.createSetStateCommand(TiltSubsystem.State.FULL);
+        SmartDashboard.putData(testFULLCommand);    
 
-        // TODO: KEITH create a Command called testFULLcommand using tiltSubsystem's
-        // createSetStateCommand()
-        // TODO: KEITH create a Command called testLONGcommand using tiltSubsystem's
-        // createSetStateCommand()
-        // TODO: KEITH create a Command called testSHORTcommand using tiltSubsystem's
-        // createSetStateCommand()
-        // TODO: KEITH create a Command called testNONEcommand using tiltSubsystem's
-        // createSetStateCommand()
-
+        Command testLONGCommand = tiltSubsystem.createSetStateCommand(TiltSubsystem.State.LONG);
+        SmartDashboard.putData(testLONGCommand);
+        
+        Command testSHORTCommand = tiltSubsystem.createSetStateCommand(TiltSubsystem.State.SHORT);
+        SmartDashboard.putData(testSHORTCommand);
+      
+        Command testNONECommand = tiltSubsystem.createSetStateCommand(TiltSubsystem.State.NONE);
+        SmartDashboard.putData(testNONECommand);
+        
         // TODO: BRADEN create a Command called testGrabber750RPMCommand using grabberSubsystem's
         // createDriveAtVelocityCommand()
         // TODO: BRADEN create a Command called testGrabberMinus650RPMCommand using grabberSubsystem's
