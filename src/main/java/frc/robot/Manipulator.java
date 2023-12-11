@@ -109,26 +109,15 @@ public class Manipulator {
         Trigger shortTrigger = controller.povRight();
         Trigger NoneTrigger = controller.povDown();
 
-        // TODO: KEITH: create a Trigger called longTrigger and initialize with
-        // controller.povUp();
-        // TODO: KEITH: create a Trigger called shortTrigger and initialize with
-        // controller.povRight();
-        // TODO: KEITH: create a Trigger called NoneTrigger and initialize with
-        // controller.povDown();
         Command fullCommand = tiltSubsystem.createSetStateCommand(TiltSubsystem.State.FULL);
         Command longCommand = tiltSubsystem.createSetStateCommand(TiltSubsystem.State.LONG);
         Command shortCommand = tiltSubsystem.createSetStateCommand(TiltSubsystem.State.SHORT);
-        // TODO: KEITH: create a Command called fullCommand and initialize with the
-        // createSetStateCommand from tiltSubsystem;
-        // TODO: KEITH: create a Command called longCommand and initialize with the
-        // createSetStateCommand from tiltSubsystem;
-        // TODO: KEITH: create a Command called shortCommand and initialize with the
-        // createSetStateCommand from tiltSubsystem;
-        // TODO: KEITH: create a Command called noneCommand and initialize with the
-        // createSetStateCommand from tiltSubsystem;
+        Command noneCommand = tiltSubsystem.createSetStateCommand(TiltSubsystem.State.NONE);
+
         fullTrigger.onTrue(fullCommand);
-        // TODO: KEITH: bind the fullTrigger to the fullCommand with fullTrigger's
-        // onTrue method
+        longTrigger.onTrue(longCommand);
+        shortTrigger.onTrue(shortCommand);
+        NoneTrigger.onTrue(noneCommand);
 
     }
 

@@ -43,7 +43,7 @@ public class ClawSubsystem extends SubsystemBase {
 
   // command creation methods. Note this only makes a command according
   // to the instructions in the method. It does not connect it to a trigger.
-  public Command createSetStateCommand(State state) {
+  public static Command createSetStateCommand(State state) {
     // TODO: create a Runnable called clawSetCommandRunnable set equal to () ->
     // setState(state)
     // TODO: create a Command called clawSetCommand set equal to
