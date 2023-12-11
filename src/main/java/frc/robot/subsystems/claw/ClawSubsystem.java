@@ -1,9 +1,12 @@
 package frc.robot.subsystems.claw;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ClawSubsystem extends SubsystemBase {
@@ -62,13 +65,10 @@ public class ClawSubsystem extends SubsystemBase {
   public Command createToggleCommand(){
     Command setOpenCommand = createSetStateCommand(getState());
     Command setClosedCommand = createSetStateCommand(getState());
-    // TODO: create a Command called setOpenCommand and initialize with createSetStateCommand
-    // TODO: create a Command called setClosedCommand and initialize with createSetStateCommand
-    // TODO: create a BooleanSupplier called selector and initialize with () -> getState() == State.Closed
-    // TODO: create a Command called toggleCommand and initialize with Commands.either(setOpenCommand, setClosedCommand, selector);
-    // TODO: use the setName() method from toggleCommand to "Toggle Command"
-    // TODO: return toggleCommand;
-    return null; // TODO: remove this line when done.  
+    BooleanSupplier selector = () -> getState() == State.CLOSED;
+    Command toggleCommand = Commands.either(setOpenCommand, setClosedCommand, selector);
+    toggleCommand.setName("Toggle Command");
+    return toggleCommand;
   }
 
   // Method runs stuff on subsystem that must change all of the time.
