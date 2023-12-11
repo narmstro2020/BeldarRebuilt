@@ -36,9 +36,7 @@ public class Manipulator {
     public void addToDashboard() {
         // TODO: ANGEL: use the SmartDashboard.putData() method to put clawSubsystem to
         // the Dashboard
-        // TODO: KEITH: use the SmartDashboard.putData() method to put tiltSubsystem to
         SmartDashboard.putData(tiltSubsystem);
-        // the Dashboard
         // TODO: BRADEN: use the SmartDashboard.putData() method to put the
         // grabberSubsystem to the Dashboard.
 
