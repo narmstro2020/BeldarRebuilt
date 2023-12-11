@@ -1,6 +1,7 @@
 package frc.robot.subsystems.claw;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -13,9 +14,13 @@ public class ClawSubsystem extends SubsystemBase {
 
   private static final class Constants {
     // TODO: create PneumaticsModuleType set equal to PneumaticsModuletype.REVPH
+    private static final PneumaticsModuleType moduleType = PneumaticsModuleType.REVPH;
     // TODO: create integer for moduleNumber set equal to 17
+    private static final int module = 17;
     // TODO: create integer for leftChannel set equal to 0
+    private static final int leftChannel = 0;
     // TODO: create integer for rightChannel set equal to 1
+    private static final int rightChannel = 1;
   }
 
   // fields
