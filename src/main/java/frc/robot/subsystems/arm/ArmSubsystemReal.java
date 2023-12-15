@@ -4,41 +4,42 @@
 
 package frc.robot.subsystems.arm;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 public final class ArmSubsystemReal extends ArmSubsystem {
 
         private static final class Constants {
                 private static final double kS = 0.057659;
-                // TODO: create a MotorType called motorType and set to MotorType.kBrushless
+                private static final MotorType motorType = MotorType.kBrushless;
         }
 
-        // TODO: create a field of type CANSparkMax called canSparkMax
+
+        private final CANSparkMax canSparkMax;
         public ArmSubsystemReal() {
                 super(Constants.kS);
-                // TODO: initialize canSparkMax appropriately
+                canSparkMax = new CANSparkMax(ArmSubsystem.Constants.deviceId, Constants.motorType);
         }
 
         @Override
         public double getAngleRads() {
-                // TODO: return canSparkMax.getEncoder().getPosition() * 2 * pi / gearing
-                return 0.0; // TODO: remove this line when finished
+                return canSparkMax.getEncoder().getPosition() * 2 * Math.PI / ArmSubsystem.Constants.gearing;
 
         }
 
         @Override
         public double getVelocityRadPerSec() {
-                // TODO: return canSparkMax.getEncoder().getVelocity() * 2 * pi / 60 / gearing
-                return 0.0; // TODO: remove this line when finished
+                return canSparkMax.getEncoder().getVelocity() * 2 * Math.PI / 60 / ArmSubsystem.Constants.gearing;
         }
 
         @Override
         public void setAngleRads(double radians) {
-                // TODO: setPosition using canSparkMax.getEncoder() to the following value
-                // radians * gearing / 2 / pi
+                setPosition(canSparkMax.getEncoder(radians * ArmSubsystem.Constants.gearing / 2 / Math.PI) );
         }
 
         @Override
         public void setInputVoltage(double voltage) {
-                // TODO: use the canSparkMax's setVoltage method set the voltage
+                canSparkMax.setVoltage(voltage);
         }
 
         // Method runs stuff on subsystem that must change all of the time.

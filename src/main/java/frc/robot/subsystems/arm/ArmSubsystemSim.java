@@ -4,29 +4,37 @@
 
 package frc.robot.subsystems.arm;
 
+import edu.wpi.first.hal.SimDouble;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+
 public final class ArmSubsystemSim extends ArmSubsystem {
 
         private static final class Constants {
-                // TODO: create an int called numMotors and set to 1
-                // TODO: create a DCMotor called dcMotor and initialize with DCMotor.getNEO
+                int numMotors = 1;
+                DCMotor dcMotor = DCMotor.getNEO(numMotors);
                 private static final double kS = 0.0;
-                // TODO: create a double called minAngleRads and initialize to
-                // Math.toRadians(-38)
-                // TODO: create a double called maxAngleRads and initialize to
-                // Math.toRadians(80)
-                // TODO: create a boolean called simulateGravity and initialize to true
-                // TODO: create a double called startingAngleRads and initialize to 0.0
+                double minAngleRads = Math.toRadians(-38);
+                double maxAngleRads = Math.toRadians(80);
+                boolean simulateGravity = true;
+                double startingAngleRads = 0.0;
         }
 
         // TODO: create a SimDouble field called simRotations
+        SimDouble simRotations;
         // TODO: create a SimDouble field called simRPM
+        SimDouble simRPM;
         // TODO: create a SimDouble field called simCurrent
+        SimDouble simCurrent;
         // TODO: create a SimDouble field called simVolts
+        SimDouble simVolts;
         // TODO: create an SingleJointedArmSim field called singleJointedArmSim
+        SingleJointedArmSim singleJointedArmSim;
 
         public ArmSubsystemSim() {
                 super(Constants.kS);
                 // TODO: initialize singleJointedArmSim with appropriate constants
+                
                 // TODO: create a SimDevice object called simDevice and initialize with
                 // SimDevice.create("NEO", ArmSubsystem.Constants.deviceId);
                 // TODO: initialize simRotations with simDevice.createDouble("Rotations",

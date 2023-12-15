@@ -4,13 +4,21 @@
 
 package frc.robot.subsystems.arm;
 
+import java.util.function.BooleanSupplier;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.LinearQuadraticRegulator;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -19,65 +27,60 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public abstract class ArmSubsystem extends SubsystemBase {
 
         protected static final class Constants {
-                double dtSeconds = 0.020;
-                int deviceId = 15;
-                double gearing = 64;
-                double kG = 0.01839;
-                double kV = 1.215936;
-                double kA = 0.0368736;
-                double maxPositionErrorRadians = 0.125;
-                double maxVelocityErrorRadiansPerSec = 1;
-                LinearSystem<N2, N1, N1> positionPlant = LinearSystemId.identifyPositionSystem(kV, kA);
-                Vector<N2> positionQelms = VecBuilder.fill(maxPositionErrorRadians, maxVelocityErrorRadiansPerSec);
-                Vector<N1> positionRelms = VecBuilder.fill(RobotController.getBatteryVoltage());
-                LinearQuadraticRegulator<N2, N1, N1> positionController = new LinearQuadraticRegulator<>(
+                protected static final double dtSeconds = 0.020;
+                protected static final int deviceId = 15;
+                protected static final double gearing = 64;
+                protected static final double kG = 0.01839;
+                protected static final double kV = 1.215936;
+                protected static final double kA = 0.0368736;
+                protected static final double maxPositionErrorRadians = 0.125;
+                protected static final double maxVelocityErrorRadiansPerSec = 1;
+                protected static final LinearSystem<N2, N1, N1> positionPlant = LinearSystemId.identifyPositionSystem(kV, kA);
+                protected static final Vector<N2> positionQelms = VecBuilder.fill(maxPositionErrorRadians, maxVelocityErrorRadiansPerSec);
+                protected static final Vector<N1> positionRelms = VecBuilder.fill(RobotController.getBatteryVoltage());
+                protected static final LinearQuadraticRegulator<N2, N1, N1> positionController = new LinearQuadraticRegulator<>(
                         positionPlant, 
                         positionQelms, 
                         positionRelms, 
                         dtSeconds); 
-                LinearSystem<N1, N1, N1> velocityPlant = LinearSystemId.identifyVelocitySystem(kV, kA);
-                Vector<N1> velocityQelms = VecBuilder.fill(maxVelocityErrorRadiansPerSec);
-                Vector<N1> velocityRelms = VecBuilder.fill(RobotController.getBatteryVoltage());
-                LinearQuadraticRegulator<N1, N1, N1> velocityController = new LinearQuadraticRegulator<>(
+                protected static final LinearSystem<N1, N1, N1> velocityPlant = LinearSystemId.identifyVelocitySystem(kV, kA);
+                protected static final Vector<N1> velocityQelms = VecBuilder.fill(maxVelocityErrorRadiansPerSec);
+                protected static final Vector<N1> velocityRelms = VecBuilder.fill(RobotController.getBatteryVoltage());
+                protected static final LinearQuadraticRegulator<N1, N1, N1> velocityController = new LinearQuadraticRegulator<>(
                         velocityPlant,
                         velocityQelms,
                         velocityRelms, 
                         dtSeconds);
-                double kPPosition = positionController.getK().get(0, 0);
-                double kIPosition = 0.0;
-                double kDPosition = positionController.getK().get(0, 1);
-                double kPVelocity = velocityController.getK().get(0, 0);
-                double kIVelocity = 0.0;
-                double kDVelocity = 0.0;
-                double tolerance = 0.0239 * 2 * Math.PI / gearing;
+                protected static final double kPPosition = positionController.getK().get(0, 0);
+                protected static final double kIPosition = 0.0;
+                protected static final double kDPosition = positionController.getK().get(0, 1);
+                protected static final double kPVelocity = velocityController.getK().get(0, 0);
+                protected static final double kIVelocity = 0.0;
+                protected static final double kDVelocity = 0.0;
+                protected static final double tolerance = 0.0239 * 2 * Math.PI / gearing;
         }
 
-        // TODO: create a field of type PIDController called positionPIDController
-        // TODO: create a field of type PIDController called velocityPIDController
-        // TODO: create a field of type TrapezoidProfile called trapezoidProfilePosition
-        // TODO: create a field of type TrapezoidProfile called trapezoidProfileVelocity
-        // TODO: create a field of type ArmFeedforward called armFeedforward
+        private final PIDController positionPIDController;
+        private final PIDController velocityPIDController;
+        private final TrapezoidProfile trapezoidProfilePosition;
+        private final TrapezoidProfile trapezoidProfileVelocity;
+        private final ArmFeedforward armFeedforward;
 
-        // TODO: create a field of type double called lastVelocity
+        private double lastVelocity;
 
         public ArmSubsystem(double kS) {
-                // TODO: initialize armFeedForward with appropriate constants
-                // TODO: create a double called maxVelocity and initialize to
-                // armFeedForward.maxachievableVelocity(12, 0)
-                // TODO: create a double called maxAcceleration and intialize to
-                // armFeedForward.maxAchievableAcceleration(12, 0)
-                // TODO: create a Constraints object called positionConstraints and intialize
-                // with
-                // maxVelocity and maxAcceleration
-                // TODO: create a Constraints object called velocityContraints and intialize
-                // with maxAcceleration and Double.PositiveInfinity
-                // TODO: initialize positionPIDController with appropriate constants
-                // TODO: initialize velocityPIDController with appropriate constants
-                // TODO: initialize trapezoidProfilePosition with appropriate constants
-                // TODO: initialize trapezoidProfileVelocity with appropriate constants
-                // TODO: set tolerance for positionPIDController
+                armFeedforward = new ArmFeedforward(kS, Constants.kG, Constants.kV, Constants.kA);
+                double maxVelocity = armFeedforward.maxAchievableVelocity(12.0, Math.PI / 2, 0.0);
+                double maxAcceleration = armFeedforward.maxAchievableAcceleration(12.0, Math.PI / 2, 0.0);
+                Constraints positionConstraints = new Constraints(maxVelocity, maxAcceleration);
+                Constraints velocityConstraints = new Constraints(maxAcceleration, Double.POSITIVE_INFINITY);
+                positionPIDController = new PIDController(Constants.kPPosition, Constants.kIPosition, Constants.kDPosition);
+                velocityPIDController = new PIDController(Constants.kPVelocity, Constants.kIVelocity, Constants.kDVelocity);
+                trapezoidProfilePosition = new TrapezoidProfile(positionConstraints);
+                trapezoidProfileVelocity = new TrapezoidProfile(positionConstraints);
+                positionPIDController.setTolerance(maxAcceleration, maxVelocity);
 
-                // TODO: initialize lastVelocity to 0.0
+                lastVelocity = 0.0;
         }
 
         public abstract double getAngleRads();
@@ -85,115 +88,80 @@ public abstract class ArmSubsystem extends SubsystemBase {
         public abstract double getVelocityRadPerSec();
 
         public double getAccelerationRadPerSecSquared() {
-                // TODO: create a double called currentVelocity and initialize to
-                // getVelocityRadPerSec()
-                // TODO: return (currentVelocity - lastVelocity) / Constants.dtSeconds
-                return 0.0; // TODO: remove this line when finished
+                double currentVelocity = getVelocityRadPerSec();
+                return (currentVelocity - lastVelocity) / Constants.dtSeconds;
         }
 
         public abstract void setAngleRads(double radians);
 
         public void turnToPosition(double degrees) {
-                // TODO: create a double called measurement and initialize to getAngleRads()
-                // TODO: create a double called measurementVelocity and initialize to
-                // getVelocityRadPerSec()
-                // TODO: create a State called current and initialize with measurement and
-                // measurementVelocity
-                // TODO: create a State called goal and initialize with Math.toRadians(degrees)
-                // and 0.0 for the velocity
-                // TODO: create a State called achievableSetpoint initialize with
-                // trapezoidProfilePosition.calculate
-                // TODO: create a double called feedbackVoltage and initialize to
-                // positionPIDController.calculate
-                // TODO: create a double called feedforwardVoltage and initialize from
-                // armFeedforward.calculate using achievableSetpoint.position and
-                // achievableSetpoint.velocity
-                // TODO: create a double called voltage equal to the sume of the previous
-                // voltages
-                // TODO: voltage = MathUtil.clamp(voltage, -12.0, 12.0);
-                // TODO: setInputVoltage to voltage
+                double measurement = getAngleRads();
+                double measurementVelocity = getVelocityRadPerSec();
+                double radians = Math.toRadians(degrees);
+                State current = new State(measurement, measurementVelocity);
+                State goal =new State(radians, 0);
+                State achievableSetpoint = trapezoidProfilePosition.calculate(Constants.dtSeconds, goal, current);
+                double feedbackVoltage = positionPIDController.calculate(measurement, achievableSetpoint.position);
+                double feedforwardVoltage = armFeedforward.calculate(achievableSetpoint.position, achievableSetpoint.velocity);
+                double voltage = feedbackVoltage + feedforwardVoltage;
+                voltage = MathUtil.clamp(voltage, -12.0, 12.0);
+                setInputVoltage(voltage);
         }
 
         public void driveAtVelocity(double degreesPerSecond) {
-                // TODO: create a double called measurementVelocity and initialize to
-                // getVelocityRadPerSec()
-                // TODO: create a double called setpoint and initialize to
-                // Math.toRadians(degreesPerSecond)
-                // TODO: create a State called current and initialize using measurementVelocity
-                // and getAccelerationRadPerSecSquared()
-                // TODO: create a State called goal and initialize to setpoint and 0.0 for the
-                // velocity
-                // TODO: create a State called achievableSetpoint and initialize to
-                // trapezoidProfileVelocity(dtSeconds, goal, current)
-                // TODO: create a double called feedbackVoltage and calculate with
-                // velocityPIDController
-                // TODO: create a double called feedforwardVoltage and calculate with
-                // armFeedforward
-                // TODO: create a double called voltage equal to the sume of the previous
-                // voltages
-                // TODO: voltage = MathUtil.clamp(voltage, -12.0, 12.0)
-                // TODO: setInputVoltage to voltage
+                double measurementVelocity = getVelocityRadPerSec();
+                double setpoint = Math.toRadians(degreesPerSecond);
+                State current = new State(measurementVelocity, getAccelerationRadPerSecSquared());
+                State goal = new State(setpoint, 0.0);
+                State achievableSetpoint = trapezoidProfileVelocity.calculate(Constants.dtSeconds, goal, current);
+                double feedbackVoltage = velocityPIDController.calculate(measurementVelocity, setpoint);
+                double feedforwardVoltage = armFeedforward.calculate(measurementVelocity, setpoint);
+                double voltage = feedbackVoltage + feedforwardVoltage;
+                voltage = MathUtil.clamp(voltage, -12.0, 12.0);
+                setInputVoltage(voltage);
         }
 
         public abstract void setInputVoltage(double voltage);
 
         public Command createTurnToPositionCommand(double degrees) {
-                // TODO: create a Runnable called resetControllers and set to () ->
-                // positionPIDController.reset()3
-                // TODO: create a Command called resetControllersCommand and initialize to
-                // runOnce(resetControllers)
-                // TODO: create a Runnable called turnToPosition and set to () ->
-                // turnToPosition(degrees)
-                // TODO: create a Command called turnToPositionCommand and initialize to
-                // run(turnToPosition)
-                // TODO: create a BooleanSupplier called endingCondition and set to () ->
-                // positionPIDController.atSetpoint()
-                // TODO: create a Runnable called endingCleanup and set to () ->
-                // setInputVoltage(0.0)
-                // TODO: create a Command called command and initialize to
-                // resetControllersCommand
-                // .andThen(turnToPositionCommand)
-                // .until(endingCondition)
-                // .finallyDo(endingCleanup);
-                // TODO: setName for command to String.format("%s degrees Command", degrees)
-                // TODO: return command
-                return null; // TODO: remove this line when done
+                Runnable resetControllers = () -> positionPIDController.reset();
+                Command resetControllersCommand = runOnce(resetControllers);
+                Runnable turnToPosition = () -> turnToPosition(degrees);
+                Command turnToPositionCommand = run(turnToPosition);
+                BooleanSupplier endingCondition = () -> positionPIDController.atSetpoint();
+                Runnable endingCleanup = () -> setInputVoltage(0.0);
+                Command command = resetControllersCommand
+                .andThen(turnToPositionCommand)
+                .until(endingCondition)
+                .finallyDo(endingCleanup);
+                command.setName(String.format("%s degrees Command", degrees));
+                return command;
         }
 
         public Command createDriveAtVelocityCommand(double degreesPerSecond) {
-                // TODO: create a Runnable called resetControllers and set to () ->
-                // velocityPIDController.reset()
-                // TODO: create a Command called resetControllersCommand and initialize to
-                // runOnce(resetControllers)
-                // TODO: create a Runnable called driveAtVelocity and set to () ->
-                // driveAtVelocity(degreesPerSecond)
-                // TODO: create a Command called driveAtVelocityCommand and initialize to
-                // run(driveAtVelocity)
-                // TODO: create a Runnable called endingCleanup and set to () ->
-                // setInputVoltage(0.0)
-                // TODO: create a Command called command and set to
-                // resetControllersCommand
-                // .andThen(driveAtVelocityCommand)
-                // .finallyDo(endingCleanup)
-                // TODO: setName for command to String.format("%s DPS Command",
-                // degreesPerSecond)
-                // TODO: return command
-                return null; // TODO: remove this line when done
+                Runnable resetControllers = () -> velocityPIDController.reset();
+                Command resetControllersCommand = runOnce(resetControllers);
+                Runnable drive = () -> driveAtVelocity(degreesPerSecond);
+                Command driveAtVelocityCommand = run(drive);
+                Runnable endingCleanup = () -> setInputVoltage(0.0);
+                Command command = resetControllersCommand
+                .andThen(driveAtVelocityCommand)
+                .finallyDo(endingCleanup);
+                command.setName(String.format("%s DPS Command",degreesPerSecond));
+                return command;
         }
 
         public void setDefaultCommand() {
-                // TODO: create a Runnable called defaultRunnable and set to () ->
-                // driveAtVelocity(0.0)
-                // TODO: create a Command called defaultCommand and intialize to
-                // runOnce(defaultRunnable)
-                // TODO: setName for defaultCommand to String.format("Stop Command")
-                // TODO: setDefaultCommand(defaultCommand);
+                Runnable defaultRunnable = () -> driveAtVelocity(0.0);
+                Command defaultCommand = runOnce(defaultRunnable);
+                defaultCommand.setName(String.format("Stop Command"));
+                setDefaultCommand(defaultCommand);
         }
 
         // Method runs stuff on subsystem that must change all of the time.
         @Override
         public void periodic() {
-                // TODO: set lastVelocity to getVelocityRadPerSec()
+                lastVelocity = getVelocityRadPerSec();
         }
 
         // Method handles reporting to the smartdashboard
