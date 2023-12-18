@@ -19,6 +19,7 @@ public class Manipulator {
 
         }
     }
+
     private final GrabberSubsystem grabberSubsystem;
 
     public Manipulator() {
@@ -38,6 +39,7 @@ public class Manipulator {
         // TODO: KEITH: use the SmartDashboard.putData() method to put tiltSubsystem to
         // the Dashboard
         SmartDashboard.putData(grabberSubsystem);
+
     }
 
     public void setDefaultCommands() {
@@ -54,16 +56,18 @@ public class Manipulator {
         // TODO: ANGEL create a Command called testCLOSEDCommand using clawSubsystem's
         // createSetStateCommand()
 
-        // TODO: KEITH create a Command called testFULLcommand using tiltSubsystem's
-        // createSetStateCommand()
-        // TODO: KEITH create a Command called testLONGcommand using tiltSubsystem's
-        // createSetStateCommand()
-        // TODO: KEITH create a Command called testSHORTcommand using tiltSubsystem's
-        // createSetStateCommand()
-        // TODO: KEITH create a Command called testNONEcommand using tiltSubsystem's
-        // createSetStateCommand()
+        Command testFULLCommand = tiltSubsystem.createSetStateCommand(TiltSubsystem.State.FULL);
+        SmartDashboard.putData(testFULLCommand);    
 
-
+        Command testLONGCommand = tiltSubsystem.createSetStateCommand(TiltSubsystem.State.LONG);
+        SmartDashboard.putData(testLONGCommand);
+        
+        Command testSHORTCommand = tiltSubsystem.createSetStateCommand(TiltSubsystem.State.SHORT);
+        SmartDashboard.putData(testSHORTCommand);
+      
+        Command testNONECommand = tiltSubsystem.createSetStateCommand(TiltSubsystem.State.NONE);
+        SmartDashboard.putData(testNONECommand);
+        
         Command testGrabber750RPMCommand = grabberSubsystem.createDriveAtVelocityCommand(750);
         Command testGrabber650RPMCommand = grabberSubsystem.createDriveAtVelocityCommand(650);
     }
@@ -91,26 +95,21 @@ public class Manipulator {
 
     }
 
-    public void bindTiltManualControlToControllerPOV(
-            CommandXboxController controller) {
-        // TODO: KEITH: create a Trigger called fullTrigger and initialize with
-        // controller.povUp();
-        // TODO: KEITH: create a Trigger called longTrigger and initialize with
-        // controller.povUp();
-        // TODO: KEITH: create a Trigger called shortTrigger and initialize with
-        // controller.povRight();
-        // TODO: KEITH: create a Trigger called NoneTrigger and initialize with
-        // controller.povDown();
-        // TODO: KEITH: create a Command called fullCommand and initialize with the
-        // createSetStateCommand from tiltSubsystem;
-        // TODO: KEITH: create a Command called longCommand and initialize with the
-        // createSetStateCommand from tiltSubsystem;
-        // TODO: KEITH: create a Command called shortCommand and initialize with the
-        // createSetStateCommand from tiltSubsystem;
-        // TODO: KEITH: create a Command called noneCommand and initialize with the
-        // createSetStateCommand from tiltSubsystem;
-        // TODO: KEITH: bind the fullTrigger to the fullCommand with fullTrigger's
-        // onTrue method
+    public void bindTiltManualControlToControllerPOV(CommandXboxController controller) {
+        Trigger fullTrigger = controller.povUp();
+        Trigger longTrigger = controller.povLeft();
+        Trigger shortTrigger = controller.povRight();
+        Trigger NoneTrigger = controller.povDown();
+
+        Command fullCommand = tiltSubsystem.createSetStateCommand(TiltSubsystem.State.FULL);
+        Command longCommand = tiltSubsystem.createSetStateCommand(TiltSubsystem.State.LONG);
+        Command shortCommand = tiltSubsystem.createSetStateCommand(TiltSubsystem.State.SHORT);
+        Command noneCommand = tiltSubsystem.createSetStateCommand(TiltSubsystem.State.NONE);
+
+        fullTrigger.onTrue(fullCommand);
+        longTrigger.onTrue(longCommand);
+        shortTrigger.onTrue(shortCommand);
+        NoneTrigger.onTrue(noneCommand);
 
     }
 
