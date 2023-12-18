@@ -53,6 +53,16 @@ public class ClawSubsystem extends SubsystemBase {
     return null; // TODO: remove this line when done
   }
 
+  public Command createToggleCommand(){
+    // TODO: create a Command called setOpenCommand and initialize with createSetStateCommand
+    // TODO: create a Command called setClosedCommand and initialize with createSetStateCommand
+    // TODO: create a BooleanSupplier called selector and initialize with () -> getState() == State.Closed
+    // TODO: create a Command called toggleCommand and initialize with Commands.either(setOpenCommand, setClosedCommand, selector);
+    // TODO: use the setName() method from toggleCommand to "Toggle Command"
+    // TODO: return toggleCommand;
+    return null; // TODO: remove this line when done.  
+  }
+
   // Method runs stuff on subsystem that must change all of the time.
   @Override
   public void periodic() {
