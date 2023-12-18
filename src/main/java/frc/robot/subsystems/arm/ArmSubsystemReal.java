@@ -34,7 +34,7 @@ public final class ArmSubsystemReal extends ArmSubsystem {
 
         @Override
         public void setAngleRads(double radians) {
-                setPosition(canSparkMax.getEncoder(radians * ArmSubsystem.Constants.gearing / 2 / Math.PI) );
+                canSparkMax.getEncoder().setPosition(radians * ArmSubsystem.Constants.gearing / 2 / Math.PI);
         }
 
         @Override

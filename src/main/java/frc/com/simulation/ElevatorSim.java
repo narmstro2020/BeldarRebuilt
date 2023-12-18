@@ -325,7 +325,7 @@ public class ElevatorSim extends LinearSystemSim<N2, N1, N2> {
    * @return The elevator current draw.
    */
   @Override
-  public double getCurrentDrawAmps() {
+  public static double getCurrentDrawAmps() {
     // I = V / R - omega / (Kv * R)
     // Reductions are greater than 1, so a reduction of 10:1 would mean the motor is
     // spinning 10x faster than the output

@@ -4,75 +4,72 @@
 
 package frc.robot.subsystems.arm;
 
+import edu.wpi.first.hal.SimDevice;
 import edu.wpi.first.hal.SimDouble;
+import edu.wpi.first.hal.SimDevice.Direction;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import frc.com.simulation.ElevatorSim;
+import frc.com.simulation.SingleJointedArmSim;
 
 public final class ArmSubsystemSim extends ArmSubsystem {
 
         private static final class Constants {
-                int numMotors = 1;
-                DCMotor dcMotor = DCMotor.getNEO(numMotors);
+                private static final int numMotors = 1;
+                private static final DCMotor dcMotor = DCMotor.getNEO(numMotors);
                 private static final double kS = 0.0;
-                double minAngleRads = Math.toRadians(-38);
-                double maxAngleRads = Math.toRadians(80);
-                boolean simulateGravity = true;
-                double startingAngleRads = 0.0;
+                private static final double minAngleRads = Math.toRadians(-38);
+                private static final double maxAngleRads = Math.toRadians(80);
+                private static final boolean simulateGravity = true;
+               private static final  double startingAngleRads = 0.0;
         }
 
-        // TODO: create a SimDouble field called simRotations
         SimDouble simRotations;
-        // TODO: create a SimDouble field called simRPM
         SimDouble simRPM;
-        // TODO: create a SimDouble field called simCurrent
         SimDouble simCurrent;
-        // TODO: create a SimDouble field called simVolts
         SimDouble simVolts;
-        // TODO: create an SingleJointedArmSim field called singleJointedArmSim
         SingleJointedArmSim singleJointedArmSim;
 
         public ArmSubsystemSim() {
                 super(Constants.kS);
-                // TODO: initialize singleJointedArmSim with appropriate constants
-                
-                // TODO: create a SimDevice object called simDevice and initialize with
-                // SimDevice.create("NEO", ArmSubsystem.Constants.deviceId);
-                // TODO: initialize simRotations with simDevice.createDouble("Rotations",
-                // Direction.kBidir, 0.0);
-                // TODO: initialize simRPM with simDevice.createDouble("RPM", Direction.kBidir,
-                // 0.0);
-                // TODO: initialize simCurrent with simDevice.createDouble("Amps",
-                // Direction.kBidir, 0.0);
-                // TODO: initialize simVolts with simDevice.createDouble("Volts",
-                // Direction.kBidir, 0.0);
+                singleJointedArmSim = new SingleJointedArmSim(
+                        null, 
+                        Constants.dcMotor, 
+                        ArmSubsystem.Constants.gearing, 
+                        Constants.minAngleRads, 
+                        Constants.maxAngleRads, 
+                        Constants.simulateGravity, 
+                        Constants.startingAngleRads, 
+                       ArmSubsystem.Constants.kG);
+                SimDevice simDevice = SimDevice.create("NEO", ArmSubsystem.Constants.deviceId);
+                simRotations = simDevice.createDouble("Rotations", Direction.kBidir, 0.0);
+                simRPM = simDevice.createDouble("RPM", Direction.kBidir, 0.0);
+                simCurrent = simDevice.createDouble("Amps", Direction.kBidir, 0.0);
+                simVolts = simDevice.createDouble("Volts", Direction.kBidir, 0.0);
         }
 
         public double getAngleRads() {
-                // TODO: return getAngleRads() from singleJointedArmSim
-                return 0.0; // TODO: remove this line when done
+                return singleJointedArmSim.getAngleRads();
         }
 
         public double getVelocityRadPerSec() {
-                // TODO: return getVelocityRadPerSec() from singleJointedArmSim
-                return 0.0; // TODO: remove this line when done
+                return singleJointedArmSim.getVelocityRadPerSec();
         }
 
         public void setAngleRads(double radians) {
-                //TODO: setState for singleJointedArmSim to radians and getVelocityRadPerSec()
+                singleJointedArmSim.setState(radians, getVelocityRadPerSec());
         }
 
         @Override
         public void setInputVoltage(double voltage) {
-                // TODO: setInputVoltage for singleJointedArmSim using voltage
-                // TODO: set simVolts to voltage
+                singleJointedArmSim.setInputVoltage(voltage);
+                simVolts.set(voltage);
         }
 
         // Method runs stuff on subsystem that must change all of the time.
         @Override
         public void periodic() {
-                // TODO: update singleJointedArmSim with dtSeconds
-                // TODO: set simRotations with getAngleRads() * gearing / 2 / pi
-                // TODO: set simRPM with getVelocityRadPerSec() * gearing * 60 / 2 / pi / drumRadius
-                // TODO: set simCurrent with getCurrentDrawAmps() from elevatorSim
+                simRotations.set(getAngleRads() * ArmSubsystem.Constants.gearing / 2 / Math.PI);
+                simRPM.set(getVelocityRadPerSec() * ArmSubsystem.Constants.gearing * 60 / 2 / Math.PI / ArmSubsystem.Constants.drumRadius);
+                simCurrent.set(ElevatorSim.getCurrentDrawAmps());
         }
 }

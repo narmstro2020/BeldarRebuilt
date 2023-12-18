@@ -58,6 +58,7 @@ public abstract class ArmSubsystem extends SubsystemBase {
                 protected static final double kIVelocity = 0.0;
                 protected static final double kDVelocity = 0.0;
                 protected static final double tolerance = 0.0239 * 2 * Math.PI / gearing;
+                public static int drumRadius;
         }
 
         private final PIDController positionPIDController;
