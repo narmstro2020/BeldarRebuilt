@@ -1,11 +1,13 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.subsystems.tilt.TiltSubsystem;
+import frc.robot.subsystems.grabber.GrabberSubsystem;
+import frc.robot.subsystems.grabber.GrabberSubsystemReal;
+import frc.robot.subsystems.grabber.GrabberSubsystemSim;
 
 public class Manipulator {
 
@@ -18,33 +20,30 @@ public class Manipulator {
         }
     }
 
-    // TODO: ANGEL: create a private final field for clawSubsystem of type
-    // ClawSubsystem
-    private final TiltSubsystem tiltSubsystem; 
-
-    // TODO: BRADEN: create a private final field for grabberSubsystem of type
-    // GrabberSubsystem.
+    private final GrabberSubsystem grabberSubsystem;
 
     public Manipulator() {
         // TODO: ANGEL: initialize clawSubsystem to new ClawSubsystem();
-        tiltSubsystem = new TiltSubsystem();
-        // TODO: BRADEN: initialize grabberSubsystem to new GrabberSubsystemReal if real
-        // and GrabberSubsystemSim if simulated.
-        // use RobotBase.isSimulation() in your if statement
+        // TODO: KEITH: initialize tiltSubsystem to new TiltSubsystem();
+
+        if(RobotBase.isSimulation()){
+            grabberSubsystem = new GrabberSubsystemSim();
+        }else{
+            grabberSubsystem = new GrabberSubsystemReal();
+        };
     }
 
     public void addToDashboard() {
         // TODO: ANGEL: use the SmartDashboard.putData() method to put clawSubsystem to
         // the Dashboard
-        SmartDashboard.putData(tiltSubsystem);
-        // TODO: BRADEN: use the SmartDashboard.putData() method to put the
-        // grabberSubsystem to the Dashboard.
+        // TODO: KEITH: use the SmartDashboard.putData() method to put tiltSubsystem to
+        // the Dashboard
+        SmartDashboard.putData(grabberSubsystem);
 
     }
 
     public void setDefaultCommands() {
-        // TODO: BRADEN: call grabberSubsystem's setDefaultCommand.  The one that takes no arguments that you made.  
-
+        grabberSubsystem.setDefaultCommand();
     }
 
     public void addMechanism2dWidget() {
@@ -69,13 +68,8 @@ public class Manipulator {
         Command testNONECommand = tiltSubsystem.createSetStateCommand(TiltSubsystem.State.NONE);
         SmartDashboard.putData(testNONECommand);
         
-        // TODO: BRADEN create a Command called testGrabber750RPMCommand using grabberSubsystem's
-        // createDriveAtVelocityCommand()
-        // TODO: BRADEN create a Command called testGrabberMinus650RPMCommand using grabberSubsystem's
-        // createDriveAtVelocityCommand()
-
-
-
+        Command testGrabber750RPMCommand = grabberSubsystem.createDriveAtVelocityCommand(750);
+        Command testGrabber650RPMCommand = grabberSubsystem.createDriveAtVelocityCommand(650);
     }
 
     public void bindArmManualControlToController(
